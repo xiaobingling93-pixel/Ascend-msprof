@@ -21,7 +21,7 @@ class DataCalculatorConfig(MetaConfig):
     DATA = {
         'BlockNumCalculator': [
             ('path', 'mscalculate.tiling_block_num.block_num_calculator'),
-            ('chip_model', '1,2,3,4,5,7'),
+            ('chip_model', '1,2,3,4,5,7,15,16'),
             ('position', 'D')
         ],
         'SubTaskCalculator': [
