@@ -16,7 +16,7 @@
 # See the Mulan PSL v2 for more details.
 # -------------------------------------------------------------------------
 CUR_DIR=$(dirname $(readlink -f $0))
-CANN_INSTALL_PATH=$(readlink -f "${CUR_DIR}/../../../..")
+CANN_INSTALL_PATH=$(readlink -f "${CUR_DIR}/../../..")
 if [ -z "${1}" ]; then
  	  install_path=${CANN_INSTALL_PATH}
 else
