@@ -25,6 +25,7 @@ RUN_SCRIPT_DIR=${TOP_DIR}/scripts/run_script
 FILTER_PARAM_SCRIPT=${RUN_SCRIPT_DIR}/help.conf
 MAIN_SCRIPT=main.sh
 INSTALL_SCRIPT=install.sh
+UN_INSTALL_SCRIPT=uninstall.sh
 UTILS_SCRIPT=utils.sh
 
 MSPROF_RUN_NAME="mindstudio-profiler"
@@ -100,6 +101,7 @@ function create_temp_dir() {
 
     copy_script ${MAIN_SCRIPT} ${temp_dir}
     copy_script ${INSTALL_SCRIPT} ${temp_dir}
+    copy_script ${UN_INSTALL_SCRIPT} ${temp_dir}
     copy_script ${UTILS_SCRIPT} ${temp_dir}
 }
 
@@ -215,6 +217,7 @@ function check_file_exist() {
 
     check_package ${temp_dir}/${MAIN_SCRIPT}
     check_package ${temp_dir}/${INSTALL_SCRIPT} ${PKG_LIMIT_SIZE}
+    check_package ${temp_dir}/${UN_INSTALL_SCRIPT} ${PKG_LIMIT_SIZE}
     check_package ${temp_dir}/${UTILS_SCRIPT} ${PKG_LIMIT_SIZE}
 }
 

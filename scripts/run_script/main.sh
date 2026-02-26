@@ -3,6 +3,7 @@
 install_args_num=0
 install_path_num=0
 
+uninstall_flag=0
 install_for_all_flag=0
 
 function parse_script_args() {
@@ -29,6 +30,11 @@ function parse_script_args() {
             shift
             continue
             ;;
+        --uninstall)
+            uninstall_flag=1
+            shift
+            continue
+            ;;
         --install-for-all)
             install_for_all_flag=1
             shift
@@ -43,11 +49,14 @@ function parse_script_args() {
 }
 
 function check_args() {
-    if [ ${install_args_num} -eq 0 ]; then
+    if [ ${install_args_num} -ne 0 ] && [ ${uninstall_flag} -eq 1 ]; then
         print "ERROR" "Input option is invalid. Please try --help."
         exit 1
     fi
-
+    if [ ${install_args_num} -eq 0 ] && [ ${uninstall_flag} -eq 0 ]; then
+ 	      print "ERROR" "Input option is invalid. Please try --help."
+ 	      exit 1
+ 	  fi
     if [ ${install_path_num} -gt 1 ]; then
         print "ERROR" "Do not input --install-path many times. Please try --help."
         exit 1
@@ -55,7 +64,21 @@ function check_args() {
 }
 
 function execute_run() {
-    bash install.sh ${install_path} ${package_arch} ${install_for_all_flag}
+ 	  if [ ${uninstall_flag} -eq 1 ]; then
+ 	      bash uninstall.sh ${install_path}
+ 	      if [ $? -ne 0 ]; then
+ 	          print "ERROR" "${MSPROF_RUN_NAME} package uninstall failed."
+ 	          exit 1
+ 	      fi
+ 	      print "INFO" "${MSPROF_RUN_NAME} package uninstall success."
+ 	  elif [ ${install_args_num} -gt 0 ]; then
+ 	      bash install.sh ${install_path} ${install_for_all_flag}
+ 	      if [ $? -ne 0 ]; then
+ 	          print "ERROR" "${MSPROF_RUN_NAME} package install failed."
+ 	          exit 1
+ 	      fi
+ 	      print "INFO" "${MSPROF_RUN_NAME} package install success, the path is: '${install_path}'."
+ 	  fi
 }
 
 function get_default_install_path() {
@@ -73,4 +96,3 @@ install_path=$(get_default_install_path)
 parse_script_args $*
 check_args
 execute_run
-print "INFO" "${MSPROF_RUN_NAME} package install success, the path is: '${install_path}'."

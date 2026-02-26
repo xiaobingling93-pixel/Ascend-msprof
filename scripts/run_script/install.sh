@@ -39,7 +39,10 @@ function implement_install() {
   create_directory ${install_path}/${arch_name}/include/acl ${right}
   create_directory ${install_path}/${arch_name}/include/ge ${right}
   create_directory ${install_path}/${ANALYSIS_PATH} ${right}
-	# 1. install collector
+  create_directory ${install_path}/${SHARE_INFO_DIR}/${MSPROF} ${right}
+  # 1. uninstall.sh
+  copy_file ${UNINSTALL_SCRIPT} ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT}
+	# 2. install collector
 	# msprof bin
 	copy_file ${MSPROF} ${install_path}/${MSPROF_PATH}/${MSPROF}
 	# libmsprofiler.so
@@ -53,7 +56,7 @@ function implement_install() {
 	# ge_prof.h
 	copy_file ${GE_PROF_H} ${install_path}/${arch_name}/include/ge/${GE_PROF_H}
 
-	# 2. install analyse
+	# 3. install analyse
 	copy_file ${ANALYSIS} ${install_path}/${ANALYSIS_PATH}/${ANALYSIS}
     msprof_analyse_whl=${install_path}/${ANALYSIS_PATH}/${MSPROF_ANALYSIS_WHL}
     copy_file ${MSPROF_ANALYSIS_WHL} $msprof_analyse_whl
@@ -134,11 +137,32 @@ function chmod_libmsprofiler() {
 	fi
 }
 
+function register_uninstall() {
+  if [ ! -f "${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT}" ]; then
+      print "ERROR" "No such file: ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT}"
+  fi
+  if [ ! -x "${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT}" ]; then
+      print "ERROR" "The file ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT} is not executable."
+      return 1
+  fi
+  if [ ! -f "${install_path}/${CANN_UNINSTALL_SCRIPT}" ]; then
+      print "ERROR" "Failed to register uninstall script, no such file: ${install_path}/${CANN_UNINSTALL_SCRIPT}"
+      return 1
+  fi
+  local script_right=$(stat -c '%a' "${install_path}/${CANN_UNINSTALL_SCRIPT}")
+  chmod u+w "${install_path}/${CANN_UNINSTALL_SCRIPT}"
+  sed -i "/^exit /i uninstall_package \"share\/info\/msprof\"" "${install_path}/${CANN_UNINSTALL_SCRIPT}"
+  chmod ${script_right} "${install_path}/${CANN_UNINSTALL_SCRIPT}"
+}
+
 source utils.sh
 
 right=${user_right}
 arch_name="${package_arch}-linux"
 implement_install
+if [ $? -eq 0 ]; then
+ 	register_uninstall
+fi
 chmod_ini_file
 set_libmsprofiler_right
 chmod_libmsprofiler

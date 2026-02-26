@@ -29,6 +29,9 @@ MSPROF="msprof"
 
 ANALYSIS_PATH="tools/profiler/profiler_tool"
 MSPROF_PATH="tools/profiler/bin"
+SHARE_INFO_DIR="share/info"
+UNINSTALL_SCRIPT="uninstall.sh"
+CANN_UNINSTALL_SCRIPT="cann_uninstall.sh"
 
 # msprof analysis whl
 MSPROF_ANALYSIS_WHL="msprof-0.0.1-py3-none-any.whl"
@@ -39,6 +42,19 @@ function print() {
     else
         echo "[${MSPROF_RUN_NAME}] [$(date +"%Y-%m-%d %H:%M:%S")] [$1]: $2" | tee -a $log_file
     fi
+}
+
+function remove() {
+ 	  local target_path=${1}
+ 	  if [ ! -d "${target_path}" ] && [ ! -f "${target_path}" ]; then
+ 	      return
+ 	  fi
+ 	  local parent_dir=$(dirname ${target_path})
+ 	  local parent_right=$(stat -c '%a' ${parent_dir})
+ 	  chmod u+wx ${parent_dir}
+ 	  chmod -R u+wx ${target_path}
+ 	  rm -rf ${target_path}
+ 	  chmod ${parent_right} ${parent_dir}
 }
 
 function get_log_file() {
