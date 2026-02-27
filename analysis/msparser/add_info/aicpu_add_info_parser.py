@@ -203,7 +203,7 @@ class AicpuAddInfoParser(DataParser, MsMultiProcess):
         result = [
             [
                 InfoConfReader().time_from_syscnt(aicpu_info.timestamp),
-                self._get_stream_id_from_host(aicpu_info),
+                self.host_tasks_map.get(aicpu_info.data.aicpu_task_id, aicpu_info.data.aicpu_stream_id),
                 aicpu_info.data.aicpu_task_id,
                 self.unique_id_map.get(aicpu_info.data.task_id, aicpu_info.data.stream_id),
                 aicpu_info.data.task_id,

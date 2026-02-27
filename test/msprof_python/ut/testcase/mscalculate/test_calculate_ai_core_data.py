@@ -382,15 +382,15 @@ class TestCalculateAiCoreData(unittest.TestCase):
         events_name_list = ['vec_bank_cflt_ratio', 'stu_pmu_wctl_ub_cflt', 'pmu_idc_aic_vec_instr_vf_busy_o',
                             'vec_resc_cflt_ratio']
         ai_core_profiling_events = {}
-        task_cyc = 11718
-        pmu_data = (1, 1, 1, 1, 28, 28, 28, 28, 28, 28)
+        task_cyc = 200
+        pmu_data = (100, 100, 100, 100, 28, 28, 28, 28, 28, 28)
         ChipManager().chip_id = ChipModel.CHIP_V6_1_0
         InfoJsonReaderManager(info_json=InfoJson(DeviceInfo=[DeviceInfo(aic_frequency=1800).device_info])).process()
         check = CalculateAiCoreData('114514')
         events_name_list_res, ai_core_profiling_events_res = check.compute_ai_core_data(
             events_name_list, ai_core_profiling_events, task_cyc, pmu_data)
-        expect_res = {'vec_bank_cflt_ratio': [1.0000853387950162], 'stu_pmu_wctl_ub_cflt': [1],
-                      'pmu_idc_aic_vec_instr_vf_busy_o': [1], 'vec_resc_cflt_ratio': [1.0]}
+        expect_res = {'vec_bank_cflt_ratio': [1.0], 'stu_pmu_wctl_ub_cflt': [0.5],
+                      'pmu_idc_aic_vec_instr_vf_busy_o': [100], 'vec_resc_cflt_ratio': [1.0]}
         self.assertEqual(ai_core_profiling_events_res, expect_res)
 
 if __name__ == '__main__':

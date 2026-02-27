@@ -407,6 +407,7 @@ class Constant:
         "ub_read_bw_scalar(GB/s)": PmuCalculateFunc.ub_read_bw_scalar,
         "ub_write_bw_scalar(GB/s)": PmuCalculateFunc.ub_write_bw_scalar,
         "fixp2ub_write_bw(GB/s)": PmuCalculateFunc.fixp2ub_write_bw,
+        "stu_pmu_wctl_ub_cflt": PmuCalculateFunc.stu_pmu_wctl_ub_cflt,
     }
 
     AICORE_PIPE_LIST = ["vec_time", "mac_time", "scalar_time", "mte1_time", "mte2_time", "mte3_time"]
