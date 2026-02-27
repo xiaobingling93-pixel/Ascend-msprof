@@ -5,6 +5,14 @@ package_arch=${2}
 install_for_all_flag=${3}
 pylocal=y
 
+function get_right() {
+    if [ "$install_for_all_flag" = 1 ] || [ "$UID" = "0" ]; then
+        right=${root_right}
+    else
+        right=${user_right}
+    fi
+}
+
 function install_whl_package() {
     local _pylocal=$1
     local _package=$2
@@ -44,7 +52,9 @@ function implement_install() {
   copy_file ${UNINSTALL_SCRIPT} ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UNINSTALL_SCRIPT}
   # 2. utils.sh
   copy_file ${UTILS_SCRIPT} ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${UTILS_SCRIPT}
-	# 2. install collector
+  # 3. version info
+  copy_file ${VERSION_INFO} ${install_path}/${SHARE_INFO_DIR}/${MSPROF}/${VERSION_INFO}
+	# 4. install collector
 	# msprof bin
 	copy_file ${MSPROF} ${install_path}/${MSPROF_PATH}/${MSPROF}
 	# libmsprofiler.so
@@ -58,7 +68,7 @@ function implement_install() {
 	# ge_prof.h
 	copy_file ${GE_PROF_H} ${install_path}/${arch_name}/include/ge/${GE_PROF_H}
 
-	# 3. install analyse
+	# 5. install analyse
 	copy_file ${ANALYSIS} ${install_path}/${ANALYSIS_PATH}/${ANALYSIS}
     msprof_analyse_whl=${install_path}/${ANALYSIS_PATH}/${MSPROF_ANALYSIS_WHL}
     copy_file ${MSPROF_ANALYSIS_WHL} $msprof_analyse_whl
@@ -161,6 +171,7 @@ source utils.sh
 
 right=${user_right}
 arch_name="${package_arch}-linux"
+get_right
 implement_install
 if [ $? -eq 0 ]; then
  	register_uninstall

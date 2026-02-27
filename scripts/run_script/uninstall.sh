@@ -36,5 +36,5 @@ function delete_register_uninstall() {
 
 source utils.sh
 remove ${install_path}/${ANALYSIS_PATH}
-remove ${install_path}/share/info/msprof
+remove ${install_path}/${SHARE_INFO_DIR}/${MSPROF}
 delete_register_uninstall

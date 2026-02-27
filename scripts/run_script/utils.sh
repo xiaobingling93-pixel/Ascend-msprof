@@ -1,7 +1,7 @@
 #!/bin/bash
 # right constant
-root_right=555
-user_right=550
+root_right=755
+user_right=750
 
 root_ini_right=444
 user_ini_right=400
@@ -33,6 +33,7 @@ SHARE_INFO_DIR="share/info"
 UNINSTALL_SCRIPT="uninstall.sh"
 UTILS_SCRIPT="utils.sh"
 CANN_UNINSTALL_SCRIPT="cann_uninstall.sh"
+VERSION_INFO="version.info"
 
 # msprof analysis whl
 MSPROF_ANALYSIS_WHL="msprof-0.0.1-py3-none-any.whl"

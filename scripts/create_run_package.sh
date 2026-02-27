@@ -98,7 +98,7 @@ function create_temp_dir() {
             exit 1
             ;;
         esac
-
+    cp -r ${TOP_DIR}/version.info ${temp_dir}
     copy_script ${MAIN_SCRIPT} ${temp_dir}
     copy_script ${INSTALL_SCRIPT} ${temp_dir}
     copy_script ${UN_INSTALL_SCRIPT} ${temp_dir}
@@ -119,14 +119,10 @@ function copy_script() {
 }
 
 function get_version() {
-    local path="${TOP_DIR}/../manifest/dependency/config.ini"
     if [[ "$VERSION" != "none" ]]; then
         echo "${VERSION}"
-    elif [ -f "${path}" ]; then
-        local version=$(grep "^version=" "${path}" | cut -d"=" -f2)
-        echo "${version}"
-    elif [ -f "${TOP_DIR}/version.txt" ]; then
-        local version=$(grep "^version=" "${TOP_DIR}/version.txt" | cut -d"=" -f2)
+    elif [ -f "${TOP_DIR}/version.info" ]; then
+        local version=$(grep "Version=" "${TOP_DIR}/version.info" | sed 's/^[[:space:]]*//' | cut -d"=" -f2 | tr -d '[:space:]')
         echo "${version}"
     else
         echo "${VERSION}"
