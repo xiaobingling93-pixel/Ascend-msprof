@@ -13,13 +13,10 @@
 # MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 # See the Mulan PSL v2 for more details.
 # -------------------------------------------------------------------------
-import glob
 import sys
 import logging
 
-from utils.file_check import FileChecker
 from src.base_ascend_msprof_checker import BaseAscendMsprofChecker
-from utils.mark_utils import arg_mark
 
 logging.basicConfig(level=logging.INFO,
                     format='\n%(asctime)s %(filename)s [line:%(lineno)d] [%(levelname)s] %(message)s')

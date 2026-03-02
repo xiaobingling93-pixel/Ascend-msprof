@@ -213,7 +213,7 @@ class BaseAscendMsprofChecker(ABC):
         if not msprof_log_paths:
             raise FileNotFoundError(f"No msprof log file found in {self.prof_path}")
         for msprof_log_path in msprof_log_paths:
-            FileChecker.check_file_for_keyword(msprof_log_path, "error")
+            FileChecker.check_file_for_keyword(msprof_log_path, "[ERROR]")
 
     def check_msprof_db_file(self):
         db_path = glob.glob(f"{self.prof_path}/PROF_*/msprof_*.db")

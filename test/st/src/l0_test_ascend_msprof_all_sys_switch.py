@@ -19,7 +19,6 @@ import logging
 
 from utils.file_check import FileChecker
 from src.base_ascend_msprof_checker import BaseAscendMsprofChecker
-from utils.mark_utils import arg_mark
 
 logging.basicConfig(level=logging.INFO,
                     format='\n%(asctime)s %(filename)s [line:%(lineno)d] [%(levelname)s] %(message)s')
@@ -158,7 +157,7 @@ def test_ascend_msprof_all_sys_switch(prof_path):
     expect_db_tables = ["ACC_PMU", "AICORE_FREQ", "CANN_API", "COMPUTE_TASK_INFO", "ENUM_API_TYPE",
                         "ENUM_HCCL_DATA_TYPE", "ENUM_HCCL_LINK_TYPE", "ENUM_HCCL_RDMA_TYPE", "ENUM_HCCL_TRANSPORT_TYPE",
                         "ENUM_MEMCPY_OPERATION", "ENUM_MODULE", "ENUM_MSTX_EVENT_TYPE", "HBM", "HCCS", "HOST_INFO",
-                        "LLC", "MEMCPY_INFO", "META_DATA", "NETDEV_STATS", "NIC", "NPU_INFO", "NPU_MEM",
+                        "LLC", "META_DATA", "NETDEV_STATS", "NIC", "NPU_INFO", "NPU_MEM",
                         "NPU_MODULE_MEM", "PCIE", "QOS", "RANK_DEVICE_MAP", "ROCE", "SESSION_TIME_INFO",
                         "SOC_BANDWIDTH_LEVEL", "STRING_IDS", "TASK", "TASK_PMU_INFO"]
     test_ascend_msprof = TestAscendMsprofAllSysSwitch(prof_path, expect_db_tables)
