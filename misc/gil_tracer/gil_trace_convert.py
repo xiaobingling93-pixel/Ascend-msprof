@@ -124,6 +124,8 @@ def main():
     converted_events = convert_gil_trace(trace_data)
 
     try:
+        if not args.output.endswith('.json'):
+            args.output += '.json'
         FileManager.create_json_file(converted_events, args.output)
     except Exception as e:
         logging.error(f"{e}")

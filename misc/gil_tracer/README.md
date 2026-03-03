@@ -2,9 +2,9 @@
 
 ## 简介
 
-当前 AI 训练、推理业务场景中，广泛使用 Python 多线程执行算子下发、内存搬运等任务。然而，由于 Python 的全局解释器锁（GIL）的存在，导致在多线程环境下，Python 解释器只能同时执行一个线程，无法实现真正的并行计算， 各线程需竞争 GIL 锁，导致 GIL 锁抢占频繁、线程调度不均，引发模型运行效率下降。
+当前 AI 训练、推理业务场景中，广泛使用 Python 多线程执行算子下发、内存搬运等任务。然而，由于 Python 的全局解释器锁（GIL）的存在，导致在多线程环境下，Python 解释器只能同时执行一个线程，无法实现真正的并行计算，各线程需竞争 GIL 锁，导致锁抢占频繁、线程调度不均，引发模型运行效率下降。
 
-针对以上问题，通过集成 openEuler [sysTrace](https://gitcode.com/openeuler/sysTrace)，我们设计了 GIL Tracer 工具，提供简单易用、无侵入的 GIL 锁检测能力，用于分析 Python 多线程程序中 GIL 锁的使用情况，帮助开发人员识别系统性能瓶颈，优化线程调度策略，并与 MindStudio Profiler 数据联合分析，助力用户优化业务逻辑，提升应用整体性能。
+针对以上问题，通过集成 openEuler [sysTrace](https://gitcode.com/openeuler/sysTrace)，我们设计了 GIL Tracer 工具，提供简单易用、无侵入性的 GIL 锁检测能力，用于分析 Python 多线程程序中 GIL 锁的使用情况，帮助开发人员识别系统性能瓶颈，优化线程调度策略，并与 MindStudio Profiler 数据联合分析，助力用户优化业务逻辑，提升应用整体性能。
 
 **使用流程**
 
@@ -16,15 +16,13 @@
 
   1. 安装 sysTrace 工具，具体请参见 《[sysTrace 安装指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md#2-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85)》。
   2. 将 sysTrace 二进制工具添加到 PATH 环境变量中。
-
-     ```bash
-     export PATH=$PATH:<sysTrace_path>/systrace/build
-     ```
+   ```bash
+   export PATH=$PATH:<sysTrace_path>/systrace/build
+   ```
   3. 配置 sysTrace 相关环境变量，包括：
-        1. 运行时依赖，具体请参见 《[sysTrace 使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md#3-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97)》。
-        2. 日志、数据目录配置，具体请参见 《[sysTrace 采集使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E9%87%87%E9%9B%86%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)》。
-       
-  4. 获取仓库中提供的采集、转换脚本 [gil_trace_record.py](gil_trace_record.py)，[gil_trace_convert.py](gil_trace_convert.py)，推荐 Profiler 和 GIL 数据同步采集。
+      1. 运行时依赖，参见 《[sysTrace 使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md#3-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97)》。
+      2. 日志、数据目录配置，参见 《[sysTrace 采集使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E9%87%87%E9%9B%86%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)》。
+  4. 获取仓库中提供的采集、转换脚本 [gil_trace_record.py](./gil_trace_record.py)，[gil_trace_convert.py](./gil_trace_convert.py)，以及文件操作相关脚本（[file_manager.py](./file_manager.py)），推荐 Profiler 和 GIL 数据同步采集。
 
 ## GIL 数据采集
 
