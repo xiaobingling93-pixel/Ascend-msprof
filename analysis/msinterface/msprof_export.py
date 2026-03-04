@@ -50,6 +50,7 @@ from common_func.path_manager import PathManager
 from common_func.platform.chip_manager import ChipManager
 from common_func.profiling_scene import ProfilingScene
 from common_func.profiling_scene import ExportMode
+from common_func.cpp_enable_scene import ExportTimelineScene, ExportSummaryScene
 from common_func.system_data_check_manager import SystemDataCheckManager
 from common_func.utils import Utils
 from framework.file_dispatch import FileDispatch
@@ -771,15 +772,14 @@ class ExportCommand:
         """
         host_path = path_table.get(StrConstant.HOST_PATH)
         valid_path = host_path if host_path else path_table.get(StrConstant.DEVICE_PATH)[0]
-        return ProfilingScene().is_cpp_parse_enable() and self.command_type == MsProfCommonConstant.TIMELINE \
-            and not ConfigMgr.is_ai_core_sample_based(valid_path) and ChipManager().is_chip_v4()
+        is_sample_based = ConfigMgr.is_ai_core_sample_based(valid_path)
+        return ExportTimelineScene(self.command_type, is_sample_based).is_cpp_enable()
 
     def _check_export_summary_with_so(self):
         """
         有so文件，且是全导，可以使用C++来导出summary
         """
-        return (ProfilingScene().is_cpp_parse_enable() and ProfilingScene().is_all_export() and
-                ChipManager().is_chip_v4() and self.command_type == MsProfCommonConstant.SUMMARY)
+        return ExportSummaryScene(self.command_type, ProfilingScene().is_all_export()).is_cpp_enable()
 
     def _check_and_split_json_trace(self, result_dir: str) -> None:
         output_path = os.path.join(result_dir, PathManager.MINDSTUDIO_PROFILER_OUTPUT)

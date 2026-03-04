@@ -25,6 +25,7 @@ from common_func.msprof_common import get_path_dir
 from common_func.ms_constant.str_constant import StrConstant
 from common_func.platform.chip_manager import ChipManager
 from common_func.profiling_scene import ProfilingScene
+from common_func.cpp_enable_scene import DataCheckScene
 
 
 class DataCheckManager:
@@ -50,8 +51,7 @@ class DataCheckManager:
 
     @classmethod
     def check_export_with_so(cls):
-        return (ProfilingScene().is_cpp_parse_enable() and
-                ProfilingScene().is_all_export() and ChipManager().is_chip_v4())
+        return DataCheckScene(ProfilingScene().is_all_export()).is_cpp_enable()
 
     @classmethod
     def check_data_exist(cls: any, result_dir: str, file_patterns: any, device_id: any = None) -> bool:

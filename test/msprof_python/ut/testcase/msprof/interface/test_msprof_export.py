@@ -770,6 +770,7 @@ class TestExportCommand(unittest.TestCase):
                 mock.patch(NAMESPACE + '.ExportCommand._update_list_map'), \
                 mock.patch(NAMESPACE + '.ExportCommand._add_export_type'), \
                 mock.patch(NAMESPACE + '.ExportCommand._check_export_summary_with_so', return_value=True), \
+                mock.patch(NAMESPACE + '.ExportCommand._check_export_timeline_with_so', return_value=False), \
                 mock.patch('importlib.import_module'), \
                 mock.patch('msinterface.msprof_output_summary.MsprofOutputSummary.export'):
             test = ExportCommand("summary", args)

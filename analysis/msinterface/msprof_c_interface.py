@@ -24,6 +24,7 @@ from common_func.info_conf_reader import InfoConfReader
 from common_func.ms_multi_process import run_in_subprocess
 from common_func.platform.chip_manager import ChipManager
 from common_func.profiling_scene import ProfilingScene
+from common_func.cpp_enable_scene import DeviceParseScene, ExportDBScene
 
 SO_DIR = os.path.join(os.path.dirname(__file__), "..", "lib64")
 
@@ -95,7 +96,7 @@ def dump_device_data(device_path: str) -> None:
         logging.warning("Device Data in custom pmu scene will not be parsed by msprof_analysis.so!")
         return
     all_export_flag = ProfilingScene().is_all_export() and InfoConfReader().is_all_export_version()
-    if ProfilingScene().is_cpp_parse_enable() and all_export_flag:
+    if DeviceParseScene().is_cpp_enable() and all_export_flag:
         run_in_subprocess(_dump_device_data, device_path)
     else:
         logging.warning("Device Data will not be parsed by msprof_analysis.so!")
@@ -106,7 +107,7 @@ def export_unified_db(project_path: str):
     """
     调用统一db
     """
-    if not ProfilingScene().is_cpp_parse_enable():
+    if not ExportDBScene().is_cpp_enable():
         logging.warning("Does not support exporting the msprof.db!")
         return
     run_in_subprocess(_export_unified_db, project_path)

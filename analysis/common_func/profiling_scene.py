@@ -46,17 +46,6 @@ class ProfilingScene:
         self._scene = None
         self._mode = ExportMode.ALL_EXPORT
 
-    @staticmethod
-    def is_cpp_parse_enable() -> bool:
-        """
-        check whether cpp_parse
-        :return: cpp_parse
-        """
-        so_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lib64", "msprof_analysis.so")
-        if not check_so_valid(so_path) or ChipManager().is_chip_v6() or ChipManager().is_chip_v5_1_0():
-            return False
-        return True
-
     def set_mode(self: any, mode: ExportMode) -> None:
         self._mode = mode
 

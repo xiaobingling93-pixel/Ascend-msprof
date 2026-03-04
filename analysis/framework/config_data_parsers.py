@@ -22,6 +22,7 @@ from common_func.info_conf_reader import InfoConfReader
 from common_func.ms_constant.number_constant import NumberConstant
 from common_func.platform.chip_manager import ChipManager
 from common_func.profiling_scene import ProfilingScene
+from common_func.cpp_enable_scene import DeviceParseScene
 from common_func.utils import Utils
 from msconfig.config_manager import ConfigManager
 
@@ -54,7 +55,7 @@ class ConfigDataParsers:
             position = cls.POSITION_OF_HOST
         conf_parser_read = ConfigManager.get(config_name)
         parser_section = conf_parser_read.sections()
-        cpp_parse_flag = ProfilingScene().is_cpp_parse_enable()
+        cpp_parse_flag = DeviceParseScene().is_cpp_enable()
         all_export_flag = ProfilingScene().is_all_export() and InfoConfReader().is_all_export_version() and task_flag
         for _section in parser_section:
             chip_model_list = cls._load_parser_chip_model(conf_parser_read, _section)

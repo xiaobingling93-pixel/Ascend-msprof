@@ -57,6 +57,7 @@ const std::unordered_map<uint16_t, std::string> CHIP_TABLE = {
     {4, "Ascend310P"},
     {5, "Ascend910B"},
     {7, "Ascend310B"},
+    {15, "Ascend950"},
 };
 }
 }
