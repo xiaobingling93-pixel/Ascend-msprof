@@ -65,9 +65,11 @@ class MonitorLogger:
                 log_path = default_log_path
             else:
                 try:
+                    FileManager.make_dir_safety(log_path)
                     FileManager.check_path_writeable(log_path)
                 except Exception as e:
-                    logging.error(f"Log path writeable check failed: {log_path}, error: {e}")
+                    logging.error(f"Log path writeable check failed: {log_path}, error: {e},"
+                                  f"reset to default path: {default_log_path}")
                     log_path = default_log_path
             cls.LOG_PATH = log_path
         return cls.LOG_PATH
