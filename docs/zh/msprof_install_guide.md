@@ -12,18 +12,13 @@
 
 ### 源码编译
 
-#### 编译采集run包
+#### 编译采集、解析run包
 
-采集run包包含msProf的采集功能，采集的是原始性能数据（不可直接查看，需通过msProf解析工具解析出交付件查看）。
-
-当前源码编译仅支持linux版本为ubuntu20.04。
+采集、解析run包包含msProf的采集和解析功能。
 
 1. 安装依赖。
 
-   msProf的采集源码在[runtime](https://gitcode.com/cann/runtime)仓和[oam-tools](https://gitcode.com/cann/oam-tools)仓中，因此msProf编采集包会先编译runtime和oam-tools两个仓的代码，而runtime仓在编译时需要指定一定版本的依赖，如gcc版本大于等于7.3.0，小于等于13、cmake版本大于等于3.16.0等。
-
-   编译runtime仓用到的依赖如下，请注意版本要求：
-
+   msProf的采集源码在[runtime](https://gitcode.com/cann/runtime)仓和[oam-tools](https://gitcode.com/cann/oam-tools)仓中，msProf编采集、解析包会先编译runtime和oam-tools两个仓的代码，runtime仓在编译时需要指定一定版本的依赖，具体如下。
    - python >= 3.9.0
    - pip3
    - gcc >= 7.3.0, <= 13
@@ -33,13 +28,7 @@
    - gperf
    - libtool
 
-   runtime仓编译前置依赖详细介绍请参见[runtime仓编译依赖](https://gitcode.com/cann/runtime/blob/master/README.md#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6)
-
-   下载并安装cmake、autoconf、gperf等编译依赖，命令如下：
-
-     ```shell
-     apt install -y cmake python3 python3-pip ccache autoconf gperf libtool libssl-dev
-     ```
+   runtime仓编译前置依赖详细介绍请参见[runtime仓编译依赖](https://gitcode.com/cann/runtime/blob/master/README.md#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6)，可直接复制[install_deps.sh](https://gitcode.com/cann/runtime/blob/master/install_deps.sh)脚本到编包环境执行。
    
 2. 下载源码。
 
@@ -56,10 +45,10 @@
        # 下载三方依赖包
        bash scripts/download_thirdparty.sh
        # 编译采集包
-       bash build/build.sh --mode=collector --version=<version>
+       bash build/build.sh --mode=all --version=<version>
       ```
    
-   编译命令支持通过--mode参数，分别编译包含msProf采集和解析功能的软件包或仅包含msProf采集功能以及仅包含msProf解析功能的软件包，更多编译参数详细介绍请参见[编译run包参数说明](#编译run包参数说明)。
+   编译命令支持通过--mode参数，分别编译包含msProf采集和解析功能的软件包或仅包含msProf解析功能的软件包，更多编译参数详细介绍请参见[编译run包参数说明](#编译run包参数说明)。
    
    编译完成后，会在msprof/output目录下生成msProf工具的run包，run包名称格式为`mindstudio-profiler_<version>_<arch>.run`。
     
