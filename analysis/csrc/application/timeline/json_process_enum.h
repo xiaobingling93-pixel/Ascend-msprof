@@ -26,6 +26,7 @@ enum class JsonProcess {
     STARS_CHIP_TRANS,
     HBM,
     COMMUNICATION,
+    CCU,
     HCCS,
     OS_RUNTIME_API,
     NETWORK_USAGE,
@@ -59,6 +60,7 @@ const std::unordered_map<std::string, JsonProcess> strToJsonProcess = {
     {"stars_chip_trans", JsonProcess::STARS_CHIP_TRANS},
     {"hbm",              JsonProcess::HBM},
     {"communication",    JsonProcess::COMMUNICATION},
+    {"ccu",              JsonProcess::CCU},
     {"hccs",             JsonProcess::HCCS},
     {"os_runtime_api",   JsonProcess::OS_RUNTIME_API},
     {"network_usage",    JsonProcess::NETWORK_USAGE},
@@ -91,7 +93,7 @@ const std::vector<JsonProcess> allProcesses{
     JsonProcess::MSPROFTX, JsonProcess::NPU_MEM, JsonProcess::OVERLAP_ANALYSE, JsonProcess::PCIE, JsonProcess::SIO,
     JsonProcess::STARS_SOC, JsonProcess::STEP_TRACE, JsonProcess::FREQ, JsonProcess::LLC, JsonProcess::NIC,
     JsonProcess::ROCE, JsonProcess::QOS, JsonProcess::DEVICE_TX, JsonProcess::LOW_POWER, JsonProcess::BIU_PERF, JsonProcess::UB,
-    JsonProcess::BLOCK_DETAIL
+    JsonProcess::BLOCK_DETAIL, JsonProcess::CCU
 };
 }
 }

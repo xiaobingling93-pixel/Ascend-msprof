@@ -19,6 +19,7 @@
 #include "analysis/csrc/domain/data_process/ai_task/api_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/communication_info_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/compute_task_info_processor.h"
+#include "analysis/csrc/domain/data_process/ai_task/ccu_mission_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/kfc_comm_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/kfc_task_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/memcpy_info_processor.h"
@@ -62,6 +63,8 @@ std::unordered_map<std::string, ProcessorCreator> DataProcessorFactory::processo
         MAKE_SHARED_RETURN_VOID(processor, ApiProcessor, profPath);}},
     {PROCESSOR_NAME_COMMUNICATION, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
         MAKE_SHARED_RETURN_VOID(processor, CommunicationInfoProcessor, profPath);}},
+    {PROCESSOR_NAME_CCU_MISSION, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
+        MAKE_SHARED_RETURN_VOID(processor, CCUMissionProcessor, profPath);}},
     {PROCESSOR_NAME_COMPUTE_TASK_INFO, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
         MAKE_SHARED_RETURN_VOID(processor, ComputeTaskInfoProcessor, profPath);}},
     {PROCESSOR_NAME_KFC_TASK, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {

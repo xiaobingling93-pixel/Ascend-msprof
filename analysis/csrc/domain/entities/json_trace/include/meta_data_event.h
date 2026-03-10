@@ -48,6 +48,7 @@ enum ProcessSortIndex {
     LAYER_NPU_LLC,
     LAYER_NPU_SIO,
     LAYER_NPU_QOS,
+    LAYER_CCU,
     LAYER_OVERLAP_ANALYSIS,
     LAYER_BIU_PERF,
     LAYER_UB,
@@ -84,6 +85,7 @@ const std::string PROCESS_OS_RUNTIME_API = "OS Runtime API";
 const std::string PROCESS_AI_CORE_FREQ = "AI Core Freq";
 const std::string PROCESS_LOW_POWER = "Low Power";
 const std::string PROCESS_HCCL = "Communication";
+const std::string PROCESS_CCU = "CCU";
 const std::string PROCESS_NPU_MEM = "NPU MEM";
 const std::string PROCESS_DDR = "DDR";
 const std::string PROCESS_ACC_PMU = "Acc PMU";
@@ -123,6 +125,7 @@ const std::unordered_map<std::string, LayerInfo> LAYER_INFO {
     {PROCESS_OS_RUNTIME_API, {PROCESS_OS_RUNTIME_API, LABEL_CPU, LAYER_OS_RUNTIME_API_SORT}},
     {PROCESS_AI_CORE_FREQ, {PROCESS_AI_CORE_FREQ, LABEL_NPU, LAYER_ASCEND_AICORE_FREQ_SORT}},
     {PROCESS_HCCL, {PROCESS_HCCL, LABEL_NPU, LAYER_HCCL}},
+    {PROCESS_CCU, {PROCESS_CCU, LABEL_NPU, LAYER_CCU}},
     {PROCESS_NPU_MEM, {PROCESS_NPU_MEM, LABEL_NPU, LAYER_NPU_MEM}},
     {PROCESS_DDR, {PROCESS_DDR, LABEL_NPU, LAYER_DDR}},
     {PROCESS_ACC_PMU, {PROCESS_ACC_PMU, LABEL_NPU, LAYER_ACC_PMU}},

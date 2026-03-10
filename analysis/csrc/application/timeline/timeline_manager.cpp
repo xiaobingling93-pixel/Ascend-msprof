@@ -38,6 +38,7 @@ const std::unordered_map<JsonProcess, std::string> JSON_TO_ASSEMBLER_TABLE{
     {JsonProcess::STARS_CHIP_TRANS, PROCESS_STARS_CHIP_TRANS},
     {JsonProcess::HBM,              PROCESS_HBM},
     {JsonProcess::COMMUNICATION,    PROCESS_HCCL},
+    {JsonProcess::CCU,              PROCESS_CCU},
     {JsonProcess::HCCS,             PROCESS_HCCS},
     {JsonProcess::OS_RUNTIME_API,   PROCESSOR_NAME_OSRT_API},
     {JsonProcess::NETWORK_USAGE,    PROCESS_NETWORK_USAGE},
@@ -66,6 +67,7 @@ const std::unordered_map<JsonProcess, std::string> JSON_TO_ASSEMBLER_TABLE{
 std::set<std::string> TIMELINE_DATA_PROCESS_LIST{
     PROCESSOR_NAME_API,
     PROCESSOR_NAME_COMMUNICATION,
+    PROCESSOR_NAME_CCU_MISSION,
     PROCESSOR_NAME_COMPUTE_TASK_INFO,
     PROCESSOR_NAME_KFC_TASK,
     PROCESSOR_NAME_KFC_COMM,

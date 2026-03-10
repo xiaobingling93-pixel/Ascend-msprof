@@ -19,6 +19,7 @@
 #include "analysis/csrc/application/timeline/ascend_hardware_assembler.h"
 #include "analysis/csrc/application/timeline/cann_assembler.h"
 #include "analysis/csrc/application/timeline/chip_trans_assembler.h"
+#include "analysis/csrc/application/timeline/ccu_assembler.h"
 #include "analysis/csrc/application/timeline/ddr_assembler.h"
 #include "analysis/csrc/application/timeline/hbm_assembler.h"
 #include "analysis/csrc/application/timeline/hccl_assembler.h"
@@ -58,6 +59,8 @@ std::unordered_map<std::string, AssemblerCreator> TimelineFactory::assemblerTabl
         MAKE_SHARED0_NO_OPERATION(assembler, HBMAssembler);}},
     {PROCESS_HCCL, [](std::shared_ptr<JsonAssembler> &assembler) {
         MAKE_SHARED0_NO_OPERATION(assembler, HcclAssembler);}},
+    {PROCESS_CCU, [](std::shared_ptr<JsonAssembler> &assembler) {
+        MAKE_SHARED0_NO_OPERATION(assembler, CCUAssembler);}},
     {PROCESS_HCCS, [](std::shared_ptr<JsonAssembler> &assembler) {
         MAKE_SHARED0_NO_OPERATION(assembler, HCCSAssembler);}},
     {PROCESSOR_NAME_OSRT_API, [](std::shared_ptr<JsonAssembler> &assembler) {
