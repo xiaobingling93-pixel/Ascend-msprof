@@ -525,21 +525,29 @@ void Context::Clear()
 
 bool Context::IsStarsChip(uint16_t platformVersion)
 {
-    return IsChipV1(platformVersion) || IsChipV4(platformVersion);
+    return IsChipV1(platformVersion) || IsChipV4(platformVersion) || IsChipV6(platformVersion);
 }
 
 bool Context::IsChipV1(uint16_t platformVersion)
 {
-    auto chipV1_1_1 = static_cast<int>(Chip::CHIP_V1_1_1);
-    auto chipV1_1_2 = static_cast<int>(Chip::CHIP_V1_1_2);
-    auto chipV1_1_3 = static_cast<int>(Chip::CHIP_V1_1_3);
-    std::unordered_set<int> checkList{chipV1_1_1, chipV1_1_2, chipV1_1_3};
+    auto chipV1_1_1 = static_cast<uint16_t>(Chip::CHIP_V1_1_1);
+    auto chipV1_1_2 = static_cast<uint16_t>(Chip::CHIP_V1_1_2);
+    auto chipV1_1_3 = static_cast<uint16_t>(Chip::CHIP_V1_1_3);
+    std::unordered_set<uint16_t> checkList{chipV1_1_1, chipV1_1_2, chipV1_1_3};
     return static_cast<bool>(checkList.count(platformVersion));
 }
 
 bool Context::IsChipV4(uint16_t platformVersion)
 {
     return platformVersion == static_cast<int>(Chip::CHIP_V4_1_0);
+}
+
+bool Context::IsChipV6(uint16_t platformVersion)
+{
+    auto chipV6_1_0 = static_cast<uint16_t>(Chip::CHIP_V6_1_0);
+    auto chipV6_2_0 = static_cast<uint16_t>(Chip::CHIP_V6_2_0);
+    std::unordered_set<uint16_t> checkList{chipV6_1_0, chipV6_2_0};
+    return static_cast<bool>(checkList.count(platformVersion));
 }
 
 bool Context::IsFirstChipV1(uint16_t platformVersion)

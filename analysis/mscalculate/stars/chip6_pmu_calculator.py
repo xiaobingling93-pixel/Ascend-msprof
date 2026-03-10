@@ -195,7 +195,7 @@ class Chip6PmuCalculator(PmuCalculator, MsMultiProcess):
                 data.task_id, data.stream_id, data.subtask_id, data.subtask_type,
                 InfoConfReader().time_from_syscnt(data.start_time),
                 InfoConfReader().time_from_syscnt(data.end_time), data.ffts_type, task_type,
-                -1,  # default batch_id
+                0,  # default batch_id
             )
             pmu_data_list.append(pmu_data)
         return pmu_data_list
