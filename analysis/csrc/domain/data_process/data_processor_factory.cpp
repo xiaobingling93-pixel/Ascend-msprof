@@ -50,7 +50,8 @@
 #include "analysis/csrc/domain/data_process/ai_task/model_name_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/hccl_statistic_processor.h"
 #include "analysis/csrc/domain/data_process/ai_task/op_statistic_processor.h"
-
+#include "analysis/csrc/domain/data_process/system/biu_perf_processor.h"
+#include "analysis/csrc/domain/data_process/system/ub_processor.h"
 namespace Analysis {
 namespace Domain {
 std::unordered_map<std::string, ProcessorCreator> DataProcessorFactory::processorTable_{
@@ -138,6 +139,10 @@ std::unordered_map<std::string, ProcessorCreator> DataProcessorFactory::processo
         MAKE_SHARED_RETURN_VOID(processor, OpStatisticProcessor, profPath);}},
     {PROCESSOR_HOST_TASK, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
         MAKE_SHARED_RETURN_VOID(processor, HostTaskProcessor, profPath);}},
+    {PROCESSOR_NAME_BIU_PERF, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
+        MAKE_SHARED_RETURN_VOID(processor, BiuPerfProcessor, profPath);}},
+    {PROCESSOR_NAME_UB, [](const std::string &profPath, std::shared_ptr<DataProcessor> &processor) {
+        MAKE_SHARED_RETURN_VOID(processor, UbProcessor, profPath);}},
 };
 
 std::shared_ptr<DataProcessor> DataProcessorFactory::GetDataProcessByName(const std::string &profPath,

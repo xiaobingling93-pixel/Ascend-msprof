@@ -253,5 +253,30 @@ double RoundToDecimalPlaces(const double num, int decimalPlaces)
     double multiplier = std::pow(10.0, decimalPlaces);
     return std::round(num * multiplier) / multiplier;
 }
+
+/**
+ * @brief 生成「固定位数补零数字」的字符串
+ * @param number 要格式化的数字（支持任意整数类型：int/uint16_t/uint32_t 等）
+ * @param fixedLength 数字部分的固定长度，不足补 0，超过则按实际长度输出
+ * @return 格式化后的完整字符串（如 number=1, fixed_length=3 → "001"）
+ */
+std::string FormatWithFixedLengthNumber(int number, int fixedLength) {
+    if (fixedLength < 1) {
+        fixedLength = 1;
+    }
+
+    if (number < 0) {
+        return std::to_string(number);
+    }
+
+    std::ostringstream oss;
+    oss << std::setw(fixedLength)
+        << std::setfill('0')
+        << std::right
+        << number;
+
+    return oss.str();
+}
+
 }  // namespace Utils
 }  // namespace Analysis

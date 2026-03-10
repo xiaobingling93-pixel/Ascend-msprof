@@ -49,6 +49,8 @@ enum ProcessSortIndex {
     LAYER_NPU_SIO,
     LAYER_NPU_QOS,
     LAYER_OVERLAP_ANALYSIS,
+    LAYER_BIU_PERF,
+    LAYER_UB,
     RESERVED
 };
 // 组件名称
@@ -94,6 +96,8 @@ const std::string PROCESS_LLC = "LLC";
 const std::string PROCESS_SIO = "SIO";
 const std::string PROCESS_QOS = "QoS";
 const std::string PROCESS_DEVICE_TX = "DEVICE_TX";
+const std::string PROCESS_BIU_PERF = "Biu Perf";
+const std::string PROCESS_UB = "Ub";
 
 struct LayerInfo {
     std::string component;
@@ -130,6 +134,8 @@ const std::unordered_map<std::string, LayerInfo> LAYER_INFO {
     {PROCESS_SIO, {PROCESS_SIO, LABEL_NPU, LAYER_NPU_SIO}},
     {PROCESS_QOS, {PROCESS_QOS, LABEL_NPU, LAYER_NPU_QOS}},
     {PROCESS_OVERLAP_ANALYSE, {PROCESS_OVERLAP_ANALYSE, LABEL_NPU, LAYER_OVERLAP_ANALYSIS}},
+    {PROCESS_BIU_PERF, {PROCESS_BIU_PERF, LABEL_NPU, LAYER_BIU_PERF}},
+    {PROCESS_UB, {PROCESS_UB, LABEL_NPU, LAYER_UB}},
 };
 
 LayerInfo GetLayerInfo(std::string processName);

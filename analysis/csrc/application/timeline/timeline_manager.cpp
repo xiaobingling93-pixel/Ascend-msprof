@@ -57,6 +57,8 @@ const std::unordered_map<JsonProcess, std::string> JSON_TO_ASSEMBLER_TABLE{
     {JsonProcess::ROCE,             PROCESS_ROCE},
     {JsonProcess::QOS,              PROCESS_QOS},
     {JsonProcess::DEVICE_TX,        PROCESS_DEVICE_TX},
+    {JsonProcess::BIU_PERF,         PROCESS_BIU_PERF},
+    {JsonProcess::UB,               PROCESS_UB},
 };
 
 std::set<std::string> TIMELINE_DATA_PROCESS_LIST{
@@ -94,6 +96,8 @@ std::set<std::string> TIMELINE_DATA_PROCESS_LIST{
     PROCESSOR_NAME_NPU_MODULE_MEM,
     PROCESSOR_NAME_NIC_TIMELINE,
     PROCESSOR_NAME_ROCE_TIMELINE,
+    PROCESSOR_NAME_BIU_PERF,
+    PROCESSOR_NAME_UB,
 };
 }
 
