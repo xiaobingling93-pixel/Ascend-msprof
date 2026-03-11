@@ -21,6 +21,7 @@ from common_func.info_conf_reader import InfoConfReader
 from common_func.ms_constant.str_constant import StrConstant
 from common_func.ms_multi_process import MsMultiProcess
 from common_func.path_manager import PathManager
+from common_func.platform.chip_manager import ChipManager
 from mscalculate.flip.flip_calculator import FlipCalculator
 from mscalculate.interface.icalculator import ICalculator
 from msmodel.ge.ge_info_model import GeInfoViewModel
@@ -41,6 +42,8 @@ class BlockNumCalculator(ICalculator, MsMultiProcess):
 
     @staticmethod
     def _process_block_num_data(data):
+        if ChipManager().is_chip_v6():
+            return {datum.task_id: datum for datum in data}
         return {(datum.stream_id, datum.task_id, datum.batch_id): datum for datum in data}
 
     def calculate(self: any) -> None:
@@ -62,7 +65,10 @@ class BlockNumCalculator(ICalculator, MsMultiProcess):
         tiling_block_num_data = FlipCalculator.set_device_batch_id(tiling_block_num_data, self._project_path)
         processed_block_num_data = self._process_block_num_data(tiling_block_num_data)
         for ge_data in ge_task_data:
-            search_key = (ge_data.stream_id, ge_data.task_id, ge_data.batch_id)
+            if ChipManager().is_chip_v6():
+                search_key = ge_data.task_id
+            else:
+                search_key = (ge_data.stream_id, ge_data.task_id, ge_data.batch_id)
             if search_key in processed_block_num_data:
                 tiling_block_num = processed_block_num_data.get(search_key).block_num
                 self._data.append(ge_data.replace(block_num=tiling_block_num & self.INVALID_BLOCK_NUM_VALUE,
