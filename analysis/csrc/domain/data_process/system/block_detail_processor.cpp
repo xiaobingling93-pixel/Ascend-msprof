@@ -46,7 +46,7 @@ bool BlockDetailProcessor::Process(DataInventory &dataInventory)
             ERROR("Get original data failed.");
             flag = false;
             continue;
-        } else if (status == NOT_EXIST) {
+        } else if (status == NOT_EXIST || oriBlockDetailData.empty()) {
             continue;
         }
         auto processedData = FormatData(oriBlockDetailData, localtimeContext);

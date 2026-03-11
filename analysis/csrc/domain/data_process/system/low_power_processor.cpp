@@ -86,7 +86,6 @@ bool LowPowerProcessor::ProcessData(const std::string& devicePath, OriLowPowerDa
     }
     if (oriData.empty()) {
         WARN("Original data is empty. DBPath is %", dbPath);
-        return false;
     }
     return true;
 }

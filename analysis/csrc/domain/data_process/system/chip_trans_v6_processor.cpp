@@ -66,7 +66,7 @@ bool ChipTransV6Processor::ProcessOneDevice(const std::string& devicePath, ChipT
     } else if (status == CHECK_FAILED) {
         flag = false;
     } else if (status == NOT_EXIST) {
-        flag = false;
+        return true;
     }
 
     std::vector<PcieInfoV6Data> pcieV6Data;
