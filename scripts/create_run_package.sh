@@ -211,7 +211,7 @@ function check_file_exist() {
             ;;
     esac
 
-    check_package ${temp_dir}/${MAIN_SCRIPT}
+    check_package ${temp_dir}/${MAIN_SCRIPT} ${PKG_LIMIT_SIZE}
     check_package ${temp_dir}/${INSTALL_SCRIPT} ${PKG_LIMIT_SIZE}
     check_package ${temp_dir}/${UN_INSTALL_SCRIPT} ${PKG_LIMIT_SIZE}
     check_package ${temp_dir}/${UTILS_SCRIPT} ${PKG_LIMIT_SIZE}
