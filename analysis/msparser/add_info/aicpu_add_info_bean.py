@@ -38,8 +38,9 @@ class AicpuNodeBean:
         self._compute_time = (data[12] - data[11]) / NumberConstant.MILLI_SECOND  # ms
         self._mem_copy_time = (data[13] - data[12]) / NumberConstant.MILLI_SECOND
         self._ai_cpu_task_end = data[15]
+        self._submit_tick = data[18]
+        self._after_run_tick = data[21]
         self._dispatch_time = data[23] / NumberConstant.MILLI_SECOND
-        self._total_time = data[24] / NumberConstant.MILLI_SECOND
 
     @property
     def stream_id(self: any) -> any:
@@ -131,7 +132,8 @@ class AicpuNodeBean:
         ai cpu total time
         :return: ai cpu total time
         """
-        return self._total_time
+        return InfoConfReader().duration_from_syscnt(self._after_run_tick - self._submit_tick,
+                                                     time_fmt=NumberConstant.MILLI_SECOND)
 
 
 class AicpuDPBean:

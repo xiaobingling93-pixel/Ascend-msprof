@@ -36,8 +36,9 @@ class AiCpuTimeConsuming:
         self._mem_copy_time = (ai_cpu_data[4] - ai_cpu_data[3]) / NumberConstant.MILLI_SECOND
         self._ai_cpu_task_end = ai_cpu_data[6]
         self._ai_cpu_task_time = ai_cpu_data[6] - ai_cpu_data[1]
+        self._submit_tick = ai_cpu_data[9]
+        self._after_run_tick = ai_cpu_data[12]
         self._dispatch_time = ai_cpu_data[14] / NumberConstant.MILLI_SECOND
-        self._total_time = ai_cpu_data[15] / NumberConstant.MILLI_SECOND
 
     @property
     def compute_time(self: any) -> float:
@@ -113,7 +114,8 @@ class AiCpuTimeConsuming:
         ai cpu total time
         :return: ai cpu total time
         """
-        return self._total_time
+        return InfoConfReader().duration_from_syscnt(self._after_run_tick - self._submit_tick,
+                                                     time_fmt=NumberConstant.MILLI_SECOND)
 
 
 class AiCpuData(StructDecoder):
