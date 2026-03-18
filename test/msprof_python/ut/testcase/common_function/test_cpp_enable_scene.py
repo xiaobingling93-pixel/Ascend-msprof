@@ -207,6 +207,32 @@ class TestCppEnableScene(unittest.TestCase):
             result = scene.is_cpp_enable()
             self.assertTrue(result)
 
+    def test_export_db_scene_should_return_true_when_chip_in_whitelist(self):
+        """
+        Test ExportDBScene should return true when chip is in whitelist
+        """
+        whitelist = [
+            ChipModel.CHIP_V2_1_0,
+            ChipModel.CHIP_V3_1_0,
+            ChipModel.CHIP_V3_2_0,
+            ChipModel.CHIP_V3_3_0,
+            ChipModel.CHIP_V4_1_0,
+            ChipModel.CHIP_V1_1_1,
+            ChipModel.CHIP_V6_1_0,
+            ChipModel.CHIP_V6_2_0
+        ]
+        with mock.patch('common_func.cpp_enable_scene.check_so_valid') as mock_check_so, \
+                mock.patch('common_func.cpp_enable_scene.ChipManager') as mock_chip_manager:
+            mock_check_so.return_value = True
+            mock_chip_manager_instance = mock_chip_manager.return_value
+            scene = ExportDBScene()
+
+            for chip in whitelist:
+                with self.subTest(chip=chip):
+                    mock_chip_manager_instance.chip_id = chip
+                    result = scene.is_cpp_enable()
+                    self.assertTrue(result)
+
     def test_all_scenes_should_return_false_when_so_not_valid(self):
         """
         Test all scenes should return false when so file is not valid

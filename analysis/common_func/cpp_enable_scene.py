@@ -139,7 +139,16 @@ class ExportDBScene(CppEnableScene):
     Export DB scene: check whether cpp export unified db is enabled
     """
 
-    SCENE_CHIP_WHITELIST = [ChipModel.CHIP_V4_1_0, ChipModel.CHIP_V6_1_0, ChipModel.CHIP_V6_2_0]
+    SCENE_CHIP_WHITELIST = [
+        ChipModel.CHIP_V2_1_0,
+        ChipModel.CHIP_V3_1_0,
+        ChipModel.CHIP_V3_2_0,
+        ChipModel.CHIP_V3_3_0,
+        ChipModel.CHIP_V4_1_0,
+        ChipModel.CHIP_V1_1_1,
+        ChipModel.CHIP_V6_1_0,
+        ChipModel.CHIP_V6_2_0
+    ]
 
 
 class DataCheckScene(CppEnableScene):
