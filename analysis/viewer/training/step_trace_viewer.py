@@ -26,7 +26,7 @@ from common_func.db_name_constant import DBNameConstant
 from common_func.info_conf_reader import InfoConfReader
 from common_func.ms_constant.number_constant import NumberConstant
 from common_func.ms_constant.str_constant import StrConstant
-from common_func.msvp_common import is_number, format_high_precision_for_csv
+from common_func.msvp_common import is_number, format_high_precision_for_csv, float_calculate
 from common_func.msvp_constant import MsvpConstant
 from common_func.path_manager import PathManager
 from common_func.step_trace_constant import StepTraceConstant
@@ -345,7 +345,19 @@ class StepTraceViewer:
             return MsvpConstant.MSVP_EMPTY_DATA
         merge_data = StepTraceViewer._reformat_step_trace_data(data, conn)
         DBManager.destroy_db_connect(conn, curs)
-        return headers, merge_data, len(merge_data)
+        start_ts, _ = InfoConfReader().get_collect_time()
+        logging.info("There are %d records before step_trace data filtering, timestamp is %s.",
+                     len(merge_data), start_ts)
+
+        def data_time_fetcher(item):
+            if is_number(item[3]) and is_number(item[4]):
+                step_start = float_calculate([item[3], item[4]], "-")
+                return step_start, item[3]
+            return 0.0, 0.0
+
+        filtered_data = Utils.filter_data_by_start_time_condition(merge_data, start_ts, data_time_fetcher)
+        logging.info("There are %d records after step_trace data filtering.", len(filtered_data))
+        return headers, filtered_data, len(filtered_data)
 
     @staticmethod
     def get_step_trace_timeline(message: dict) -> list:
