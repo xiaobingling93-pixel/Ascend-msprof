@@ -14,14 +14,16 @@
 
 ## 使用前准备
 
-  1. 安装 sysTrace 工具，具体请参见 《[sysTrace 安装指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md#2-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85)》。
+  1. 安装 sysTrace 工具，具体请参见 《[sysTrace 安装指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/installation.md)》。
   2. 将 sysTrace 二进制工具添加到 PATH 环境变量中。
-   ```bash
-   export PATH=$PATH:<sysTrace_path>/systrace/build
-   ```
+
+      ```bash
+      export PATH=$PATH:<sysTrace_path>/systrace/build
+      ```
+
   3. 配置 sysTrace 相关环境变量，包括：
-      1. 运行时依赖，参见 《[sysTrace 使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md#3-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97)》。
-      2. 日志、数据目录配置，参见 《[sysTrace 采集使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/%E9%87%87%E9%9B%86%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)》。
+      1. 运行时依赖，参见 《[sysTrace 使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/introduction.md)》。
+      2. 日志、数据目录配置，参见 《[sysTrace 采集使用指南](https://gitcode.com/openeuler/sysTrace/blob/master/docs/zh/data_collection.md)》。
   4. 获取仓库中提供的采集、转换脚本 [gil_trace_record.py](./gil_trace_record.py)，[gil_trace_convert.py](./gil_trace_convert.py)，以及文件操作相关脚本（[file_manager.py](./file_manager.py)），推荐 Profiler 和 GIL 数据同步采集。
 
 ## GIL 数据采集
