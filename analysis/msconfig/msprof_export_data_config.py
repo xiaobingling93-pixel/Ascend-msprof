@@ -317,11 +317,7 @@ class MsProfExportDataConfig(MetaConfig):
             ('handler', '_get_ub_data'),
             ('db', DBNameConstant.DB_UB),
             ('table', DBNameConstant.TABLE_UB_BW),
-            ('headers', 'PortId,TimeStamp,UDMARxPortBandWidth(MB/s),UDMATxPortBandWidth(MB/s),'
-                        'UNICRxPortBandWidth(MB/s),UNICTxPortBandWidth(MB/s),UNICRxPacketRate(Packet/us),UNICRxBytes(Byte),'
-                        'UNICRxPackets(Packet),UNICRxErrors(Packet),UNICRxDropped(Packet),'
-                        'UNICTxPacketRate(Packet/us),UNICTxBytes(Byte),UNICTxPackets(Packet),UNICTxErrors(Packet),'
-                        'UNICTxDropped(Packet)')
+            ('headers', 'PortId,TimeStamp,UBRxPortBandWidth(MB/s),UBTxPortBandWidth(MB/s)')
         ],
         'ccu_mission': [
             ('handler', '_get_ccu_mission_data'),

@@ -34,10 +34,7 @@ class UBViewer(BaseViewer, ABC):
                     use_us=True)
             port = "Port" + f"{data.port_id:03d}"
             column_trace_data.append(
-                ["UNIC-" + port, local_time, self.pid, self.tid, {"bandwidth_rx(MB/s)": data.rx_port_band_width,
-                "bandwidth_tx(MB/s)": data.tx_port_band_width}])
-            column_trace_data.append(
-                ["UDMA-" + port, local_time, self.pid, self.tid, {"bandwidth_rx(MB/s)": data.udma_rx_bind,
+                ["UB " + port, local_time, self.pid, self.tid, {"bandwidth_rx(MB/s)": data.udma_rx_bind,
                 "bandwidth_tx(MB/s)": data.udma_tx_bind}])
         return column_trace_data
 
@@ -70,8 +67,7 @@ class UBViewer(BaseViewer, ABC):
                         raw_timestamp=InfoConfReader().get_host_time_by_sampling_timestamp(data.time_stamp),
                         use_us=True)
                 ),
-                data.udma_rx_bind, data.udma_tx_bind, data.rx_port_band_width, data.tx_port_band_width, data.rx_packet_rate,
-                data.rx_bytes, data.rx_packets, data.rx_errors, data.rx_dropped, data.tx_packet_rate,
-                data.tx_bytes, data.tx_packets, data.tx_errors, data.tx_dropped
+                data.udma_rx_bind,
+                data.udma_tx_bind
             ) for data in summary_data
         ]

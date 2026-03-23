@@ -20,7 +20,9 @@ class TestUBViewer(unittest.TestCase):
         with mock.patch(NAMESPACE + '.UBViewModel.check_table', return_value=True):
             check = UBViewer(configs, param)
             ret = check.get_trace_timeline(datas)
-            self.assertEqual(5, len(ret))
+            self.assertEqual(3, len(ret))
+            self.assertEqual("UB Port000", ret[1]["name"])
+            self.assertEqual("UB Port000", ret[2]["name"])
 
     def test_format_ub_summary_data_should_return_formatted_summary_data(self):
         InfoConfReader()._info_json = {"pid": 1, "tid": 1, "DeviceInfo": [{"hwts_frequency": "50"}]}
@@ -34,3 +36,5 @@ class TestUBViewer(unittest.TestCase):
             check = UBViewer(configs, param)
             ret = check.format_ub_summary_data(datas)
             self.assertEqual(2, len(ret))
+            self.assertEqual(4, len(ret[0]))
+            self.assertEqual((0, ret[0][1], 800, 1000), ret[0])

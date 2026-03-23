@@ -33,11 +33,7 @@ void GenerateUbTrace(std::vector<UbData> &ubData, const std::unordered_map<uint1
             time = DivideByPowersOfTenWithPrecision(data.timestamp);
             pid = pidMap.at(data.deviceId);
             std::string port = "Port" + FormatWithFixedLengthNumber(data.portId, 3);
-            MAKE_SHARED_RETURN_VOID(event, CounterEvent, pid, DEFAULT_TID, time, "UNIC-"+port);
-            event->SetSeriesDValue("bandwidth_rx(MB/s)", data.rxPortBandWidth);
-            event->SetSeriesDValue("bandwidth_tx(MB/s)", data.txPortBandWidth);
-            res.emplace_back(std::move(event));
-            MAKE_SHARED_RETURN_VOID(event, CounterEvent, pid, DEFAULT_TID, time, "UDMA-"+port);
+            MAKE_SHARED_RETURN_VOID(event, CounterEvent, pid, DEFAULT_TID, time, "UB "+port);
             event->SetSeriesDValue("bandwidth_rx(MB/s)", data.udmaRxBind);
             event->SetSeriesDValue("bandwidth_tx(MB/s)", data.udmaTxBind);
             res.emplace_back(std::move(event));
