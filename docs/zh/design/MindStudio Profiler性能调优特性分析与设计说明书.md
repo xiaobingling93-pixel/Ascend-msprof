@@ -443,9 +443,9 @@ NA
 
 ## 6.1可测试性
 
-基于Capture、Repaly两个阶段的性能数据的采集和解析进行设计测试用例，主要包含：
+基于Capture、Replay两个阶段的性能数据的采集和解析进行设计测试用例，主要包含：
 
-- Capture阶段、Repaly阶段的Profiling使能情况
+- Capture阶段、Replay阶段的Profiling使能情况
 - 数据解析呈现的性能数据的交付件字段完整性
 
 ## 6.2可服务性
