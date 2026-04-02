@@ -180,12 +180,10 @@ reports\_sample\_config.json文件默认保存在`${INSTALL_DIR}/tools/profiler/
 
 以上为控制相应性能数据的开关，可配置开启（true）或关闭（false或删除字段）。控制的性能数据包括msprof\_\*.json文件的timeline数据层级（包括CANN，Ascend Hardware、AI Core Freq、片上内存、Communication、Overlap Analysis、NPU\_MEM层级等）。
 
->[!NOTE] 说明 
+>[!NOTE] 说明
 >
->- 导出以上数据的前提是原始性能数据中已存在相应数据，即相应数据已采集。
->- 需确保reports\_sample\_config.json文件格式正确，否则可能导致如下情况：
->       - 文件内容错误，如拼写错误，--reports参数不生效，导出全量性能数据。
->       - 文件读取失败，如权限问题、文件不存在等，导致--reports无法读取配置文件，则会中断导出进程并报错。
+>1. 导出以上数据的前提是原始性能数据中已存在相应数据，即相应数据已采集。
+>2. 需确保reports_sample_config.json文件格式正确，否则可能导致文件内容错误（如拼写错误，--reports参数不生效，导出全量性能数据）或文件读取失败（如权限问题、文件不存在等，导致--reports无法读取配置文件，中断导出进程并报错）。
 
 **输出说明**
 
