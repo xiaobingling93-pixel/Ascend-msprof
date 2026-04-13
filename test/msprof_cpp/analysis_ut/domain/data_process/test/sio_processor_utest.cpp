@@ -19,6 +19,7 @@
 #include "analysis/csrc/domain/data_process/system/sio_processor.h"
 #include "analysis/csrc/domain/services/environment/context.h"
 #include "analysis/csrc/viewer/database/finals/unified_db_constant.h"
+#include "reserve_mock_utils.h"
 
 using namespace Analysis::Domain;
 using namespace Domain::Environment;
@@ -126,9 +127,9 @@ TEST_F(SioProcessorUTest, TestRunDataShouldReturnFalseWhenProcessDataFailed)
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_SIO));
     MOCKER_CPP(&OriSioData::empty).reset();
     // Reserve failed
-    MOCKER_CPP(&std::vector<SioData>::reserve).stubs().will(throws(std::bad_alloc()));
+    Analysis::Test::StubReserveFailureForVector<std::vector<SioData>>();
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_SIO));
-    MOCKER_CPP(&std::vector<SioData>::reserve).reset();
+    Analysis::Test::ResetReserveFailureForVector<std::vector<SioData>>();
 }
 
 TEST_F(SioProcessorUTest, TestRunShouldReturnFalseWhenProcessSingleDeviceFailed)
@@ -136,7 +137,7 @@ TEST_F(SioProcessorUTest, TestRunShouldReturnFalseWhenProcessSingleDeviceFailed)
     auto processor = SioProcessor(PROF_DIR);
     DataInventory dataInventory;
 
-    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(INVALID_DEVICE_ID));
+    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(static_cast<uint16_t>(INVALID_DEVICE_ID)));
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_SIO));
     MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).reset();
 }

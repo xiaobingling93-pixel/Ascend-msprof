@@ -18,11 +18,13 @@
 #include "analysis/csrc/domain/data_process/ai_task/msproftx_device_processor.h"
 #include "analysis/csrc/domain/services/environment/context.h"
 #include "analysis/csrc/viewer/database/finals/unified_db_constant.h"
+#include "reserve_mock_utils.h"
 
 using namespace Analysis::Viewer::Database;
 using namespace Analysis::Domain;
 using namespace Analysis::Utils;
 using namespace Analysis::Domain::Environment;
+using namespace Analysis::Test;
 namespace {
 const int DEPTH = 0;
 const std::string DEVICE_TX_PATH = "./msprof_tx_device";
@@ -100,7 +102,7 @@ TEST_F(MsprofTxDeviceProcessorUTest, ShouldReturnFalseWhenCheckFailed)
     MOCKER_CPP(&Context::GetProfTimeRecordInfo).reset();
 
     MOCKER_CPP(&Context::GetProfTimeRecordInfo).stubs().will(returnValue(true));
-    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(HOST_ID));
+    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(static_cast<uint16_t>(HOST_ID)));
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_TASK));
     MOCKER_CPP(&Context::GetProfTimeRecordInfo).reset();
     MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).reset();
@@ -124,6 +126,7 @@ TEST_F(MsprofTxDeviceProcessorUTest, ShouldReturnFalseWhenReserveException)
     auto processor = MsprofTxDeviceProcessor(PROF_PATH_A);
     MOCKER_CPP(&Context::GetProfTimeRecordInfo).stubs().will(returnValue(true));
     MOCKER_CPP(&Context::GetSyscntConversionParams).stubs().will(returnValue(true));
-    MOCKER_CPP(&std::vector<MsprofTxDeviceData>::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<std::vector<MsprofTxDeviceData>>();
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_TASK));
+    ResetReserveFailureForVector<std::vector<MsprofTxDeviceData>>();
 }

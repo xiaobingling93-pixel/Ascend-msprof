@@ -34,7 +34,7 @@ const std::string DB_PATH = File::PathJoin({SQLITE_DIR, "hccl_single_device.db"}
 
 // modelId, opName, taskType, opType, timestamp, relay, retry, dataType, algType, count, groupName, connectionId
 using HcclOpDataFormat = std::vector<std::tuple<uint64_t, std::string, std::string, std::string, uint64_t, int32_t,
-        int32_t, std::string, std::string, uint64_t, std::string, int64_t>>;
+        int32_t, std::string, std::string, int32_t, std::string, int64_t>>;
 const HcclOpDataFormat HCCL_OP_DATA = {
     {4294967295, "hcom_batchSendRecv_", "HCCL", "hcom_batchSendRecv_", 2825926938915, 0, 0, "FP16", "MESH-HD",
         6291456, "15733047711421650659", 8},
@@ -45,10 +45,10 @@ const HcclOpDataFormat HCCL_OP_DATA = {
 // modelId, indexId, opName, iteration, hcclName, groupName, firstTimestamp, planeId, timestamp, duration, isDynamic,
 // taskType, opType, connectionId, isMaster, streamId, taskId, durationEstimated, localRank, remoteRank, transportType,
 // size, dataType, linkType, bandwidth, contextId, notifyId, batchId, rdmaType
-using HcclTaskDataFormat = std::vector<std::tuple<uint64_t, int32_t, std::string, uint32_t, std::string, std::string,
-        uint64_t, int32_t, double, double, std::string, std::string, std::string, int64_t, uint32_t, uint32_t,
-        uint32_t, double, uint32_t, uint32_t, std::string, double, std::string, std::string, double, uint32_t,
-        std::string, uint32_t, std::string>>;
+using HcclTaskDataFormat = std::vector<std::tuple<uint64_t, int32_t, std::string, uint16_t, std::string, std::string,
+        uint64_t, int32_t, double, double, std::string, std::string, std::string, int64_t, uint16_t, uint32_t,
+        uint16_t, double, uint32_t, uint32_t, std::string, double, std::string, std::string, double, uint32_t,
+        std::string, uint16_t, std::string>>;
 const HcclTaskDataFormat HCCL_TASK_DATA = {
     {4294967295, -1, "hcom_batchSendRecv__360_0_1", 0, "RDMASend", "10652853832407468360", 2825926938915, 0,
         28121259851740, 320, "1", "HCCL", "hcom_batchSendRecv_", 8, 1, 4, 285, 7.00033333333333, 9, 1, "RDMA",
@@ -95,6 +95,9 @@ protected:
 
     void SetUp() override
     {
+        if (File::Exist(DB_PATH)) {
+            EXPECT_TRUE(File::DeleteFile(DB_PATH));
+        }
         auto hcclOp = GenerateHcclOpData();
         std::shared_ptr<std::vector<Analysis::Domain::HcclOp>> opData;
         MAKE_SHARED0_NO_OPERATION(opData, std::vector<Analysis::Domain::HcclOp>, std::move(hcclOp));
@@ -115,6 +118,9 @@ protected:
     void TearDown() override
     {
         dataInventory_.RemoveRestData({});
+        if (File::Exist(DB_PATH)) {
+            EXPECT_TRUE(File::DeleteFile(DB_PATH));
+        }
     }
 
     static std::vector<Analysis::Domain::HcclOp> GenerateHcclOpData()
@@ -184,18 +190,14 @@ TEST_F(DeviceHcclPersistenceUTest, TestProcessEntryWhenProcessSuccessThenReturnO
     EXPECT_EQ(HCCL_STATISTICS_DATA, statisticsData);
 }
 
-TEST_F(DeviceHcclPersistenceUTest, TestProcessEntryWhenReserveFailedThenReturnError)
+TEST_F(DeviceHcclPersistenceUTest, TestProcessEntryWhenCreateTableFailedThenReturnError)
 {
     Analysis::Domain::DeviceHcclPersistence per;
     Analysis::Domain::DeviceContext context;
     context.deviceContextInfo.deviceFilePath = DEVICE_DIR;
-    MOCKER_CPP(&HcclOpDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
-    MOCKER_CPP(&HcclTaskDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
-    MOCKER_CPP(&HcclStatisticsFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    MOCKER_CPP(&DBRunner::CreateTable).stubs().will(returnValue(false));
     ASSERT_EQ(Analysis::ANALYSIS_ERROR, per.Run(dataInventory_, context));
-    MOCKER_CPP(&HcclStatisticsFormat::reserve).stubs().will(throws(std::bad_alloc()));
-    MOCKER_CPP(&HcclTaskDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
-    MOCKER_CPP(&HcclOpDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    MOCKER_CPP(&DBRunner::CreateTable).reset();
 }
 
 TEST_F(DeviceHcclPersistenceUTest, TestProcessEntryWhenDataPointerIsNullThenReturnError)

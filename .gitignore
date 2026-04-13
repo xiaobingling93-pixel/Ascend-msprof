@@ -1,26 +1,74 @@
-# Byte-compiled / optimized / DLL files
+# Python cache and virtual test artifacts
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+.mypy_cache/
+.tox/
+.nox/
 
-# Visual Studio Code files
-.vscode
-.vs
+# Coverage and test reports
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+final.xml
+python_coverage_report.log
+inc_coverage_result.html
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
 
-# analisys
-analysis/lib64
+# IDE and local tooling
+.vscode/
+.vs/
+.idea/
+.codex
+.codex/
+.omx/
 
-# PyCharm files
-.idea
+# Logs
+*.log
 
-# third-party
+# Native build outputs
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.lib
+*.exe
+*.out
+*.db
+
+# CMake and install outputs
+/build/analysis/
+/build/compile_commands.json
+/build/msprof_tmp/
+/build/**/CMakeFiles/
+/build/**/CMakeCache.txt
+/build/**/cmake_install.cmake
+/build/**/Makefile
+/build/**/Testing/
+/build/**/CMakeTmp/
+/build/**/analysis-prefix/
+/prefix/
+/analysis/lib64/
+
+# Third-party source pulled locally during build/test
 /opensource/
-platform/
+/platform/
+/test/opensource/
 
-# build
-build/prefix
-build/build
-
-# test cache file
-test/build_llt
-test/output
+# Test build and output directories
+/test/build_llt/
+/test/output/
+/output/
+*.egg-info/
+db_assembler/
+PROF/
+*.slice*

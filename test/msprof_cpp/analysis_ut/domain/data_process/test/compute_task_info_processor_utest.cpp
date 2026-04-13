@@ -20,10 +20,12 @@
 #include "mockcpp/mockcpp.hpp"
 #include "analysis/csrc/domain/data_process/ai_task/compute_task_info_processor.h"
 #include "analysis/csrc/viewer/database/finals/unified_db_constant.h"
+#include "reserve_mock_utils.h"
 
 using namespace Analysis::Viewer::Database;
 using namespace Analysis::Utils;
 using namespace Analysis::Domain;
+using namespace Analysis::Test;
 using HashMap = std::unordered_map<std::string, std::string>;
 namespace {
 const int DEPTH = 0;
@@ -155,11 +157,9 @@ TEST_F(ComputeTaskInfoProcessorUTest, TestProcessShouldReturnFalseWhenLoadDataFa
 {
     auto processor = ComputeTaskInfoProcessor(PROF_PATH_A);
     DataInventory dataInventory;
-    MOCKER_CPP(&std::vector<TaskInfoData>::reserve)
-    .stubs()
-    .will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<std::vector<TaskInfoData>>();
     EXPECT_FALSE(processor.Process(dataInventory));
-    MOCKER_CPP(&std::vector<TaskInfoData>::reserve).reset();
+    ResetReserveFailureForVector<std::vector<TaskInfoData>>();
 
     DBInfo geInfoDB("ge_info.db", "TaskInfo");
     geInfoDB.dbRunner = nullptr;

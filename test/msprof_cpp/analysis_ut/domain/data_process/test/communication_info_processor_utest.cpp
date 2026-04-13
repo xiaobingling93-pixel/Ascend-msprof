@@ -24,11 +24,13 @@
 #include "analysis/csrc/viewer/database/finals/unified_db_constant.h"
 #include "analysis/csrc/domain/services/environment/context.h"
 #include "analysis/csrc/infrastructure/data_inventory/include/data_inventory.h"
+#include "reserve_mock_utils.h"
 
 using namespace Analysis::Domain;
 using namespace Analysis::Application::Credential;
 using namespace Analysis::Utils;
 using namespace Domain::Environment;
+using namespace Analysis::Test;
 namespace {
 const int DEPTH = 0;
 const uint16_t OP_NUM = 4;
@@ -321,19 +323,14 @@ TEST_F(CommunicationInfoProcessorUTest, TestRunShouldReturnFalseWhenInsertDataFa
 
 TEST_F(CommunicationInfoProcessorUTest, TestRunShouldReturnFalseWhenReserveFailedThenDataIsEmpty)
 {
-    using TempT = std::tuple<uint32_t, uint32_t, uint32_t, uint32_t, std::string, uint32_t,
-            std::string, uint32_t, std::string, uint64_t, uint64_t, uint32_t, uint32_t, uint64_t,
-            uint64_t, uint64_t, uint64_t, std::string>;
-    MOCKER_CPP(&std::vector<TempT>::reserve)
-    .stubs()
-    .will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<std::vector<CommunicationTaskData>>();
     std::string processorName = "COMMUNICATION_TASK_INFO";
     for (auto path : PROF_PATHS) {
         auto processor = CommunicationInfoProcessor(path);
         auto dataInventory = DataInventory();
         EXPECT_FALSE(processor.Run(dataInventory, processorName));
     }
-    MOCKER_CPP(&std::vector<TempT>::reserve).reset();
+    ResetReserveFailureForVector<std::vector<CommunicationTaskData>>();
 }
 
 TEST_F(CommunicationInfoProcessorUTest, TestRunShouldReturnTrueWhenNoDb)

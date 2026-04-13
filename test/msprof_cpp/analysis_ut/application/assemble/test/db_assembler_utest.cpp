@@ -115,6 +115,30 @@ static std::string GetMsprofDbPath()
     return files.size() ? files[0] : "";
 }
 
+template<typename ElemT>
+static void StubReserveFailureForElem()
+{
+    MOCKER_CPP(&Reserve<ElemT>).stubs().will(returnValue(false));
+}
+
+template<typename ElemT>
+static void ResetReserveFailureForElem()
+{
+    MOCKER_CPP(&Reserve<ElemT>).reset();
+}
+
+template<typename VectorT>
+static void StubReserveFailureForVector()
+{
+    StubReserveFailureForElem<typename VectorT::value_type>();
+}
+
+template<typename VectorT>
+static void ResetReserveFailureForVector()
+{
+    ResetReserveFailureForElem<typename VectorT::value_type>();
+}
+
 static std::vector<ApiData> GenerateApiData()
 {
     std::vector<ApiData> res;
@@ -765,9 +789,9 @@ TEST_F(DBAssemblerUTest, TestRunApiDataShouldReturnFalseWhenReserveFailed)
     dataInventory.Inject(dataS);
 
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunHcclDataShouldReturnTrueWhenRunSuccess)
@@ -814,17 +838,17 @@ TEST_F(DBAssemblerUTest, TestRunHcclDataShouldReturnFalseWhenReserveFailed)
     // 大算子数据
     // opName, start, end, connectionId, group_name, opId, relay, retry, data_type, alg_type, count, op_type
     using CommunicationOpDataFormat = std::vector<std::tuple<uint64_t, uint64_t, uint64_t, uint64_t, uint64_t,
-        int32_t, int32_t, int32_t, uint64_t, uint64_t, uint64_t, uint64_t>>;
+        uint32_t, int32_t, int32_t, uint64_t, uint64_t, uint64_t, uint64_t, uint16_t>>;
     auto assembler = DBAssembler(PROF, OUTPUT_PATH);
     auto dataInventory = DataInventory();
     InjectHcclData(dataInventory);
     // Reserve CommunicationTaskDataFormat failed
-    MOCKER_CPP(&CommunicationTaskDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<CommunicationTaskDataFormat>();
     // Reserve CommunicationOpDataFormat failed
-    MOCKER_CPP(&CommunicationOpDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<CommunicationOpDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&CommunicationTaskDataFormat::reserve).reset();
-    MOCKER_CPP(&CommunicationOpDataFormat::reserve).reset();
+    ResetReserveFailureForVector<CommunicationTaskDataFormat>();
+    ResetReserveFailureForVector<CommunicationOpDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunAccPmuDataShouldReturnTrueWhenRunSuccess)
@@ -853,9 +877,9 @@ TEST_F(DBAssemblerUTest, TestRunAccPmuDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<AccPmuData>, data);
     dataInventory.Inject<std::vector<AccPmuData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunAicoreFreqDataShouldReturnTrueWhenRunSuccess)
@@ -882,9 +906,9 @@ TEST_F(DBAssemblerUTest, TestRunAicoreFreqDataShouldReturnFalseWhenReserveFailed
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<AicoreFreqData>, data);
     dataInventory.Inject<std::vector<AicoreFreqData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunDDRDataShouldReturnTrueWhenRunSuccess)
@@ -911,9 +935,9 @@ TEST_F(DBAssemblerUTest, TestRunDDRDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<DDRData>, data);
     dataInventory.Inject<std::vector<DDRData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunEnumDataShouldReturnTrueWhenProcessorRunSuccess)
@@ -941,9 +965,9 @@ TEST_F(DBAssemblerUTest, TestRunShouldReturnFalseWhenReserveFailedThenDataIsEmpt
     using SaveDataFormat = std::tuple<uint16_t, std::string>;
     auto assembler = DBAssembler(PROF, OUTPUT_PATH);
     auto dataInventory = DataInventory();
-    MOCKER_CPP(&std::vector<SaveDataFormat>::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForElem<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&std::vector<SaveDataFormat>::reserve).reset();
+    ResetReserveFailureForElem<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunHbmDataShouldReturnTrueWhenRunSuccess)
@@ -968,9 +992,9 @@ TEST_F(DBAssemblerUTest, TestRunHbmDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<HbmData>, data);
     dataInventory.Inject<std::vector<HbmData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunHostInfoShouldReturnTrueWhenProcessorRunSuccess)
@@ -1032,9 +1056,9 @@ TEST_F(DBAssemblerUTest, TestRunHccsDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<HccsData>, data);
     dataInventory.Inject<std::vector<HccsData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 
@@ -1060,9 +1084,9 @@ TEST_F(DBAssemblerUTest, TestRunLLcDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<LLcData>, data);
     dataInventory.Inject<std::vector<LLcData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunMsprofTxDataShouldReturnTrueWhenRunSuccess)
@@ -1088,9 +1112,9 @@ TEST_F(DBAssemblerUTest, TestRunMsprofTxDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<MsprofTxHostData>, data);
     dataInventory.Inject<std::vector<MsprofTxHostData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunNpuDataShouldReturnTrueWhenProcessorRunSuccess)
@@ -1177,9 +1201,9 @@ TEST_F(DBAssemblerUTest, TestRunNpuMemDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<NpuMemData>, data);
     dataInventory.Inject<std::vector<NpuMemData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunPCIeDataShouldReturnTrueWhenRunSuccess)
@@ -1208,9 +1232,9 @@ TEST_F(DBAssemblerUTest, TestRunPCIeDataShouldReturnFalseWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<PCIeData>, data);
     dataInventory.Inject<std::vector<PCIeData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSessionTimeInfoShouldReturnTrueWhenProcessorRunSuccess)
@@ -1263,9 +1287,9 @@ TEST_F(DBAssemblerUTest, TestRunSocShouldReturnFalseWhenGetTimeFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<SocBandwidthData>, data);
     dataInventory.Inject<std::vector<SocBandwidthData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&SaveDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SaveDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SaveDataFormat::reserve).reset();
+    ResetReserveFailureForVector<SaveDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunStringIdsShouldReturnTrueWhenProcessorRunSuccess)
@@ -1289,13 +1313,13 @@ TEST_F(DBAssemblerUTest, TestRunStringIdsShouldReturnFalseWhenReserveFailedThenD
 {
     using TempT = std::tuple<uint64_t, std::string>;
     using ProcessedDataFormat = std::vector<std::tuple<uint64_t, std::string>>;
-    MOCKER_CPP(&ProcessedDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<ProcessedDataFormat>();
     IdPool::GetInstance().GetUint64Id("pool");
     IdPool::GetInstance().GetUint64Id("Conv2d");
     auto dataInventory = DataInventory();
     auto assembler = DBAssembler(PROF, OUTPUT_PATH);
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&ProcessedDataFormat::reserve).reset();
+    ResetReserveFailureForVector<ProcessedDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSysIOShouldReturnTrueWhenProcessorRunSuccess)
@@ -1357,9 +1381,9 @@ TEST_F(DBAssemblerUTest, TestRunSysIOShouldReturnFalseWhenGetTimeFailed)
     dataInventory.Inject(nicDataS);
 
     // Reserve failed
-    MOCKER_CPP(&SysIODataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<SysIODataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&SysIODataFormat::reserve).reset();
+    ResetReserveFailureForVector<SysIODataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunShouldReturnTrueWhenDataIsEmpty)
@@ -1442,9 +1466,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveMemcpyInfoDataShouldReturnFalseWhenReserveFa
     std::shared_ptr<std::vector<MemcpyInfoData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<MemcpyInfoData>, data);
     dataInventory.Inject<std::vector<MemcpyInfoData>>(dataS);
-    MOCKER_CPP(&ProcessedDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<ProcessedDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&ProcessedDataFormat::reserve).reset();
+    ResetReserveFailureForVector<ProcessedDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunAssemblerShouldReturnFalseWhenProfPathIsEmpty)
@@ -1459,9 +1483,9 @@ TEST_F(DBAssemblerUTest, TestSaveMetaDataShouldReturnFalseWhenReserveFailed)
     auto assembler = DBAssembler(PROF, OUTPUT_PATH);
     auto dataInventory = DataInventory();
     using DataFormat = std::vector<std::tuple<std::string, std::string>>;
-    MOCKER_CPP(&DataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<DataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&DataFormat::reserve).reset();
+    ResetReserveFailureForVector<DataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestSaveNpuOpMemDataShouldReturnFalseWhenReserveFailed)
@@ -1476,9 +1500,9 @@ TEST_F(DBAssemblerUTest, TestSaveNpuOpMemDataShouldReturnFalseWhenReserveFailed)
     std::shared_ptr<std::vector<NpuOpMemData>> dataSave;
     MAKE_SHARED0_NO_OPERATION(dataSave, std::vector<NpuOpMemData>, res);
     dataInventory.Inject<std::vector<NpuOpMemData>>(dataSave);
-    MOCKER_CPP(&NpuOpMemDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<NpuOpMemDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&NpuOpMemDataFormat::reserve).reset();
+    ResetReserveFailureForVector<NpuOpMemDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestSaveComputeTaskInfoShouldReturnFalseWhenReserveFailed)
@@ -1495,9 +1519,9 @@ TEST_F(DBAssemblerUTest, TestSaveComputeTaskInfoShouldReturnFalseWhenReserveFail
     std::shared_ptr<std::vector<TaskInfoData>> dataSave;
     MAKE_SHARED0_NO_OPERATION(dataSave, std::vector<TaskInfoData>, res);
     dataInventory.Inject<std::vector<TaskInfoData>>(dataSave);
-    MOCKER_CPP(&ComputeTaskInfoFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<ComputeTaskInfoFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&ComputeTaskInfoFormat::reserve).reset();
+    ResetReserveFailureForVector<ComputeTaskInfoFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestSaveAscendTaskDataShouldReturnFalseWhenReserveFailed)
@@ -1512,9 +1536,9 @@ TEST_F(DBAssemblerUTest, TestSaveAscendTaskDataShouldReturnFalseWhenReserveFaile
     std::shared_ptr<std::vector<AscendTaskData>> dataSave;
     MAKE_SHARED0_NO_OPERATION(dataSave, std::vector<AscendTaskData>, res);
     dataInventory.Inject<std::vector<AscendTaskData>>(dataSave);
-    MOCKER_CPP(&ascendTaskDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<ascendTaskDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&ascendTaskDataFormat::reserve).reset();
+    ResetReserveFailureForVector<ascendTaskDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveTaskPmuDataShouldReturnTrueWhenRunSuccess)
@@ -1559,9 +1583,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveTaskPmuDataShouldReturnFalseWhenReserveFaile
     std::shared_ptr<std::vector<UnifiedTaskPmu>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<UnifiedTaskPmu>, data);
     dataInventory.Inject<std::vector<UnifiedTaskPmu>>(dataS);
-    MOCKER_CPP(&PTFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<PTFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&PTFormat::reserve).reset();
+    ResetReserveFailureForVector<PTFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveSamplePmuTimelineDataShouldReturnFalseWhenReserveFailedThenDataIsEmpty)
@@ -1573,9 +1597,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveSamplePmuTimelineDataShouldReturnFalseWhenRe
     std::shared_ptr<std::vector<UnifiedSampleTimelinePmu>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<UnifiedSampleTimelinePmu>, data);
     dataInventory.Inject<std::vector<UnifiedSampleTimelinePmu>>(dataS);
-    MOCKER_CPP(&PSTFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<PSTFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&PSTFormat::reserve).reset();
+    ResetReserveFailureForVector<PSTFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveSamplePmuSummaryDataShouldReturnFalseWhenReserveFailedThenDataIsEmpty)
@@ -1587,9 +1611,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveSamplePmuSummaryDataShouldReturnFalseWhenRes
     std::shared_ptr<std::vector<UnifiedSampleSummaryPmu>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<UnifiedSampleSummaryPmu>, data);
     dataInventory.Inject<std::vector<UnifiedSampleSummaryPmu>>(dataS);
-    MOCKER_CPP(&PSSFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<PSSFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&PSSFormat::reserve).reset();
+    ResetReserveFailureForVector<PSSFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveTaskPmuDataShouldReturnTrueWhenTaskPmuDataIsNotExist)
@@ -1622,9 +1646,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveCpuUsageDataShouldReturnFalseWhenReserveFail
     std::shared_ptr<std::vector<CpuUsageData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<CpuUsageData>, data);
     dataInventory.Inject<std::vector<CpuUsageData>>(dataS);
-    MOCKER_CPP(&format::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<format>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&format::reserve).reset();
+    ResetReserveFailureForVector<format>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveCpuUsageDataShouldReturnTrueWhenRunSuccess)
@@ -1647,9 +1671,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveHostMemUsageDataShouldReturnFalseWhenReserve
     std::shared_ptr<std::vector<MemUsageData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<MemUsageData>, data);
     dataInventory.Inject<std::vector<MemUsageData>>(dataS);
-    MOCKER_CPP(&format::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<format>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&format::reserve).reset();
+    ResetReserveFailureForVector<format>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveHostMemUsageDataShouldReturnTrueWhenRunSuccess)
@@ -1672,9 +1696,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveHostDiskUsageDataShouldReturnFalseWhenReserv
     std::shared_ptr<std::vector<DiskUsageData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<DiskUsageData>, data);
     dataInventory.Inject<std::vector<DiskUsageData>>(dataS);
-    MOCKER_CPP(&format::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<format>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&format::reserve).reset();
+    ResetReserveFailureForVector<format>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveHostDiskUsageDataShouldReturnTrueWhenRunSuccess)
@@ -1697,9 +1721,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveHostNetworkUsageDataShouldReturnFalseWhenRes
     std::shared_ptr<std::vector<NetWorkUsageData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<NetWorkUsageData>, data);
     dataInventory.Inject<std::vector<NetWorkUsageData>>(dataS);
-    MOCKER_CPP(&format::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<format>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&format::reserve).reset();
+    ResetReserveFailureForVector<format>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveHostNetworkUsageDataShouldReturnTrueWhenRunSuccess)
@@ -1722,9 +1746,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveOSRuntimeApiDataShouldReturnFalseWhenReserve
     std::shared_ptr<std::vector<OSRuntimeApiData>> dataS;
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<OSRuntimeApiData>, data);
     dataInventory.Inject<std::vector<OSRuntimeApiData>>(dataS);
-    MOCKER_CPP(&format::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<format>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&format::reserve).reset();
+    ResetReserveFailureForVector<format>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveOSRuntimeApiDataShouldReturnTrueWhenRunSuccess)
@@ -1756,9 +1780,9 @@ TEST_F(DBAssemblerUTest, TestRunNetDevStatDataShouldReturnFalseWhenReserveFailed
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<NetDevStatsEventData>, data);
     dataInventory.Inject<std::vector<NetDevStatsEventData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&NetDevStatEventDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<NetDevStatEventDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&NetDevStatEventDataFormat::reserve).reset();
+    ResetReserveFailureForVector<NetDevStatEventDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveNetDevStatsDataShouldReturnTrueWhenRunSuccess)
@@ -1783,9 +1807,9 @@ TEST_F(DBAssemblerUTest, TestRunSaveQosDataShouldReturnTrueWhenReserveFailed)
     MAKE_SHARED0_NO_OPERATION(dataS, std::vector<QosData>, data);
     dataInventory.Inject<std::vector<QosData>>(dataS);
     // Reserve failed
-    MOCKER_CPP(&QosDataFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<QosDataFormat>();
     EXPECT_FALSE(assembler.Run(dataInventory));
-    MOCKER_CPP(&QosDataFormat::reserve).reset();
+    ResetReserveFailureForVector<QosDataFormat>();
 }
 
 TEST_F(DBAssemblerUTest, TestRunSaveQosDataShouldReturnTrueWhenDataNotExistOrRunSuccess)

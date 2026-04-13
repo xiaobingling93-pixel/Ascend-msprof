@@ -19,10 +19,12 @@
 #include "mockcpp/mockcpp.hpp"
 #include "analysis/csrc/domain/services/environment/context.h"
 #include "analysis/csrc/viewer/database/finals/unified_db_constant.h"
+#include "reserve_mock_utils.h"
 
 using namespace Analysis::Domain;
 using namespace Domain::Environment;
 using namespace Analysis::Utils;
+using namespace Analysis::Test;
 
 // syscnt, freq
 using FreqDataFormat = std::vector<std::tuple<uint64_t, double>>;
@@ -152,7 +154,7 @@ TEST_F(AicoreFreqProcessorUTest, TestProcessShouldReturnFalseWhenProcessFailed)
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_AICORE_FREQ));
     MOCKER_CPP(&Context::GetSyscntConversionParams).reset();
 
-    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(UINT16_MAX));
+    MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).stubs().will(returnValue(static_cast<uint16_t>(UINT16_MAX)));
     EXPECT_FALSE(processor.Run(dataInventory, PROCESSOR_NAME_AICORE_FREQ));
     MOCKER_CPP(&Utils::GetDeviceIdByDevicePath).reset();
 
@@ -184,9 +186,8 @@ TEST_F(AicoreFreqProcessorUTest, TestFormatDataShouldReturnFalseWhenFormatDataFa
     MOCKER_CPP(&Context::GetPmuFreq).reset();
 
     // Reserve failed
-    MOCKER_CPP(&ProcessedDataVecFormat::reserve).stubs().will(throws(std::bad_alloc()));
+    StubReserveFailureForVector<ProcessedDataVecFormat>();
     auto processor2 = AicoreFreqProcessor(PROF);
     EXPECT_FALSE(processor2.Run(dataInventory, processorName));
-    MOCKER_CPP(&ProcessedDataVecFormat::reserve).reset();
+    ResetReserveFailureForVector<ProcessedDataVecFormat>();
 }
-
