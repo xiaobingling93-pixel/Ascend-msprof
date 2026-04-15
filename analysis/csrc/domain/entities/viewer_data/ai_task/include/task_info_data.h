@@ -17,6 +17,7 @@
 #define ANALYSIS_DOMAIN_TASK_INFO_DATA_H
 
 #include <string>
+#include <stdint.h>
 
 namespace Analysis {
 namespace Domain {

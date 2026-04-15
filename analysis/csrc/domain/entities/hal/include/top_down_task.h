@@ -18,6 +18,7 @@
 #define ANALYSIS_DOMAIN_ENTITIES_HAL_TOP_DOWN_TASK_H
 
 #include <string>
+#include <stdint.h>
 
 struct TopDownTask {
     bool isFirst = false; // taskId-streamId-batchId-contextId都相同的任务中的第一个

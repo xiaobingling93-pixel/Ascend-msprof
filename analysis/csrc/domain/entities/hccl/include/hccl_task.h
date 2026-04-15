@@ -18,6 +18,8 @@
 #define MSPROF_ANALYSIS_ORI_HCCL_TASK_H
 
 #include <string>
+#include <stdint.h>
+
 namespace Analysis {
 namespace Domain {
 struct HcclOp {

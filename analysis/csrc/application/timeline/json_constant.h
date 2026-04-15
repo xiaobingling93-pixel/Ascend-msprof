@@ -18,6 +18,7 @@
 #define ANALYSIS_APPLICATION_DELIVERABLES_CONSTANT_H
 
 #include <string>
+#include <stdint.h>
 
 namespace Analysis {
 namespace Application {
