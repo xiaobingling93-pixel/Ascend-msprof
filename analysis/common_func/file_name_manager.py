@@ -192,6 +192,7 @@ class FileNameManagerConstant:
     HOST_SYS_CALL_PATTERN = r"^host_syscall\.data\.slice_\d+"
     HOST_PTHREAD_CALL_PATTERN = r"^host_pthreadcall\.data\.slice_\d+"
     HOST_NETWORK_USAGE_PATTERN = r"^host_network\.data\.slice_\d+"
+    HOST_PLATFORM_PATTERN = r"^host_platform_uncore\.bin"
 
     SOC_LOG_FILE_PATTERN = r"^stars_soc\.data\.(\d+)\.slice_\d+"
     SOC_PROFILE_FILE_PATTERN = r"^stars_soc_profile\.data\.(\d+)\.slice_\d+"
@@ -773,6 +774,11 @@ def get_host_pthread_call_compiles() -> tuple:
     """
     return (re.compile(FileNameManagerConstant.HOST_PTHREAD_CALL_PATTERN),)
 
+def get_host_platform_compiles() -> tuple:
+    """
+    get host platform regex compiles
+    """
+    return (re.compile(FileNameManagerConstant.HOST_PLATFORM_PATTERN),)
 
 def get_os_runtime_api_compiles() -> tuple:
     """
