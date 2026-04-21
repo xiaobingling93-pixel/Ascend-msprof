@@ -588,7 +588,7 @@ msproftx采集的是用户和上层框架程序输出性能数据，数据保存
 |--|--|
 |msprof_*.json|timeline汇总数据。详情请参见[msproftx timeline汇总数据](#zh-cn_topic_0000001798418925_section5704032072)。|
 |msprof_tx_*.json|msproftx timeline数据。为msprof_*.json的子集。详情请参见[msproftx timeline数据。](#zh-cn_topic_0000001798418925_section12121185651210)|
-|msprof_tx_*.csv|msproftx summary数据。对采集到的Host msproftx summary数据按线程进行拼接，并进行数据关联性展示。详情请[参见msprof_tx summary数据](#zh-cn_topic_0000001798418925_section15813213018)。|
+|msprof_tx_*.csv|msproftx summary数据。对采集到的Host msproftx summary数据按线程进行拼接，并进行数据关联性展示。详情请参见[msprof_tx summary数据](#zh-cn_topic_0000001798418925_section15813213018)。|
 
 **msproftx timeline汇总数据<a name="zh-cn_topic_0000001798418925_section5704032072"></a>**
 
@@ -1062,7 +1062,7 @@ npu\_module\_mem\_\*.csv文件内容格式示例如下：
 
 数据增强信息仅在训练场景下生成且仅生成summary数据dp\_\*.csv。
 
-在TensorFlow训练场景开启数据预处理下沉（即enable\_data\_pre\_proc开关配置为True）时可生成dp\_\*.csv文件。详情请参见《TensorFlow 1.15模型迁移指南》中的“训练迭代循环下沉”章节。
+在TensorFlow训练场景开启数据预处理下沉（即enable\_data\_pre\_proc开关配置为True）时可生成dp\_\*.csv文件。详情请参见《TensorFlow 1.15模型迁移指南》中的“[训练迭代循环下沉](https://www.hiascend.com/document/detail/zh/TensorFlowCommercial/850/migration/tfmigr1/tfmigr1_000048.html)”章节。
 
 **产品支持情况<a name="zh-cn_topic_0000001752181593_section91616487538"></a>**
 

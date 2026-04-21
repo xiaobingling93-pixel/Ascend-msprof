@@ -392,7 +392,7 @@ msprof工具的查询功能获取到的信息如[表2](#zh-cn_topic_000000131270
     >[!NOTE] 说明 
     >
     >- 默认情况下，导出所有性能数据。
-    >- 单算子场景和仅执行采集昇腾AI处理器系统数据的场景（即**msprof**采集命令未配置用户应用程序参数**--application**的情况），不支持--iteration-id和--model-id参数。
+    >- 单算子场景和仅执行采集昇腾AI处理器系统数据的场景（即`msprof`采集命令未配置用户应用程序参数`--application`的情况），不支持--iteration-id和--model-id参数。
 
 **输出说明<a name="zh-cn_topic_0000001265069834_section54271276213"></a>**
 

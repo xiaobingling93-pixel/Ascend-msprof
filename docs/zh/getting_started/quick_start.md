@@ -8,13 +8,13 @@
 
 ## 环境准备
 
-- 请确保安装CANN Toolkit开发套件包和ops算子包，具体请参见《[CANN 软件安装指南](https://www.hiascend.com/document/detail/zh/canncommercial/850/softwareinst/instg/instg_0000.html?Mode=PmIns&InstallType=local&OS=openEuler)》。
+- 请确保安装CANN Toolkit开发套件包和ops算子包，具体请参见[CANN快速安装](https://www.hiascend.com/cann/download)。
 - 执行以下命令设置环境变量：
- 
+
     ```bash
     # ${install_path} 为 CANN 软件的安装目录，例如：/usr/local/Ascend/ascend-toolkit。
     source ${install_path}/set_env.sh
-    ```  
+    ```
   
 - 运行以下命令验证安装是否成功:  
 
@@ -23,7 +23,7 @@
     which msprof
     # 查看msprof的命令参数
     msprof --help
-    ``` 
+    ```
 
 ## 采集、解析并导出性能数据
 
@@ -37,7 +37,7 @@
     > - --output：收集到的性能数据的存放路径；
     > - --application：待采集性能数据的用户程序；
     > - 以上为最基本的采集命令，如有其他采集需求，请参见[性能数据采集和自动解析](https://www.hiascend.com/document/detail/zh/mindstudio/830/T&ITools/Profiling/atlasprofiling_16_0007.html#ZH-CN_TOPIC_0000002536038281)。
-       
+   
    打印如下信息，则表示运行成功：
 
     ```bash
@@ -76,10 +76,12 @@
 
 ### Timeline数据可视化
 
-建议使用[MindStudio Insight](https://gitcode.com/Ascend/msinsight)可视化工具加载PROF_XXX文件夹：
+建议使用MindStudio Insight可视化工具加载PROF_XXX文件夹进行如下操作：
 
-* 定位耗时较长的 API、算子及任务流 
+* 定位耗时较长的 API、算子及任务流
 * 通过 HostToDevice 连线分析下发关系
+
+MindStudio Insight工具详细介绍请参见《[MindStudio Insight工具用户指南](https://gitcode.com/Ascend/msinsight/blob/26.0.0/docs/zh/user_guide/overview.md)》。
 
 ![img](../figures/zh-cn_image_0000002502558722.png)
 <div style="text-align: center;">
