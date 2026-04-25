@@ -475,3 +475,11 @@ class AiStackDataCheckManager(DataCheckManager):
         """
         return cls.check_data_exist(result_dir, file_name_manager.get_v5_stars_profile_compiles(),
                                     device_id=device_id)
+
+    @classmethod
+    def contain_dpu_data(cls: any, result_dir: str, device_id: any = None) -> bool:
+        """
+        The data path contain dpu data or not
+        """
+        return cls.check_data_exist(result_dir, file_name_manager.get_dpu_track_compact_compiles()) or \
+            cls.check_data_exist(result_dir, file_name_manager.get_dpu_hccl_track_compact_compiles())

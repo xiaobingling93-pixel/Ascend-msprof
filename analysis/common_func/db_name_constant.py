@@ -110,6 +110,7 @@ class DBNameConstant(metaclass=ABCMeta):
     DB_SOC_PMU = "soc_pmu.db"
     DB_VOLTAGE = "voltage.db"
     DB_FUSION_TASK = "fusion_task.db"
+    DB_DPU = "dpu.db"
 
     # DB tables
     TABLE_ACL_DATA = "AclData"
@@ -354,6 +355,10 @@ class DBNameConstant(metaclass=ABCMeta):
     TABLE_NODE_ATTR_INFO = "NodeAttrInfo"
     TABLE_HCCL_OP_INFO = "HcclOpInfo"
     TABLE_STREAM_EXPAND_SPEC = "StreamExpandSpec"
+
+    # dpu
+    TABLE_DPU_TASK_TRACK = "DPUTaskTrack"
+    TABLE_DPU_HCCL_TRACK = 'DPUHcclTrack'
 
     # v5
     TABLE_V5_TASK = "V5Task"

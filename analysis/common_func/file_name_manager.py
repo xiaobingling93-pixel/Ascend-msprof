@@ -250,6 +250,10 @@ class FileNameManagerConstant:
     AICPU_FILE_PATTERN = r"^aicpu\.data\.(\d+)\.slice_\d+"
     HCCL_OP_INFO_FILE_PATTERN = r"^(unaging|aging)\.compact\.hccl_op_info\.slice_\d+"
 
+    # dpu
+    DPU_TASK_TRACK_FILE_PATTERN = r"^(aging|unaging)\.compact\.dpu_track\.slice_\d+"
+    DPU_HCCL_TRACK_FILE_PATTERN = r"^(aging|unaging)\.additional\.dpu_hccl_track\.slice_\d+"
+
     # V5
     V5_MODEL_EXEOM_PATTERN = r"^unaging\.additional\.model_exeom\.slice_\d+"
     V5_STARS_PROFILE_PATTERN = r"^nano_stars_profile\.data.\d+\.slice_\d+"
@@ -1171,3 +1175,21 @@ def get_dbg_file_compiles() -> tuple:
     :return: v5 host info files regex
     """
     return (re.compile(FileNameManagerConstant.DBG_PATTERN),)
+
+
+def get_dpu_track_compact_compiles() -> tuple:
+    """
+    get dpu task track regex compiles
+    """
+    return (
+        re.compile(FileNameManagerConstant.DPU_TASK_TRACK_FILE_PATTERN),
+    )
+
+
+def get_dpu_hccl_track_compact_compiles() -> tuple:
+    """
+    get runtime task track regex compiles
+    """
+    return (
+        re.compile(FileNameManagerConstant.DPU_HCCL_TRACK_FILE_PATTERN),
+    )

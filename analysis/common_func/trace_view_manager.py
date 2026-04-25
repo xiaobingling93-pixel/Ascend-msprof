@@ -157,7 +157,10 @@ class TraceViewManager:
         :return: format_pid: Uint32: pid use high 22bit, index_id use middle 5bit, device_id use low 5bit
         ps: pid_max is 10^22 - 1
         """
-        if layer_info.general_layer == TraceViewHeaderConstant.GENERAL_LAYER_CPU or \
+        if layer_info.general_layer == TraceViewHeaderConstant.GENERAL_LAYER_DPU:
+            device_id = pid
+            pid = InfoConfReader().get_json_pid_data()
+        elif layer_info.general_layer == TraceViewHeaderConstant.GENERAL_LAYER_CPU or \
                 not is_number(InfoConfReader().get_device_id()):
             # host device_id is 31, we cannot use NumberConstant.HOST_ID,
             # cause this value is also been used in record time.
