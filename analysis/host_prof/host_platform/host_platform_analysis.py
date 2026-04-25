@@ -33,8 +33,8 @@ class HostPlatformAnalysis(MsMultiProcess):
     """
 
     PLATFORM = "PLATFORM_"
-    PROF_RESULT_PATTERN = r".*?PROF_\d{1,10}_\d{1,20}_[A-Z]{5,20}\/"
-    PROF_NAME_PATTERN = r"PROF_\d{1,10}_\d{1,20}_[A-Z]{5,20}"
+    PROF_RESULT_PATTERN = r".*?PROF_\d{1,10}_\d{1,20}_[A-Z0-9]{5,20}\/"
+    PROF_NAME_PATTERN = r"PROF_\d{1,10}_\d{1,20}_[A-Z0-9]{5,20}"
 
     def __init__(self: any, sample_config: dict) -> None:
         super().__init__(sample_config)

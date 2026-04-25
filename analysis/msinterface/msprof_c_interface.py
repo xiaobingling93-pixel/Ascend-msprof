@@ -70,7 +70,7 @@ def _export_platform(platform_uncore_trace: str, output_path: str):
         return
     sys.path.append(os.path.realpath(SO_DIR))
     logging.info("Platform data will be exported by platform_analysis.so")
-    platform_analysis_module = importlib.import_module("platform_analysis.so")
+    platform_analysis_module = importlib.import_module("platform_analysis")
     platform_analysis_module.process_platform_data(platform_uncore_trace, output_path)
 
 
